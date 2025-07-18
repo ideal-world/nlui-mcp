@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+    "ms-vscode.vscode-typescript-next",
+    "svelte.svelte-vscode",
+    "esbenp.prettier-vscode",
+    "inlang.vs-code-extension"
+  ]
+}
