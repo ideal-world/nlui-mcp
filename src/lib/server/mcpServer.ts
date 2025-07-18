@@ -5,6 +5,80 @@ import { ErrorHandler } from '../utils/errorHandler';
 import { logger } from '../utils/logger';
 import { formatSchemaAsDocumentation } from './dynamicTypeGenerator';
 import { nluiSchemas } from './generated/schemas';
+import { randomUUID } from 'crypto';
+
+/**
+ * 内存存储，用于保存NLUIProps配置
+ * In-memory storage for NLUIProps configurations
+ */
+const nluiPropsStorage = new Map<string, any>();
+
+/**
+ * 清理过期的存储项（24小时后过期）
+ * Clean up expired storage items (expires after 24 hours)
+ */
+const storageMetadata = new Map<string, { timestamp: number }>();
+const STORAGE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+function cleanupExpiredStorage() {
+	const now = Date.now();
+	for (const [instanceId, metadata] of storageMetadata.entries()) {
+		if (now - metadata.timestamp > STORAGE_EXPIRY_MS) {
+			nluiPropsStorage.delete(instanceId);
+			storageMetadata.delete(instanceId);
+			logger.debug('Cleaned up expired storage item', {
+				component: 'MCPServer',
+				action: 'cleanupStorage',
+				metadata: { instanceId }
+			});
+		}
+	}
+}
+
+// 定期清理过期项
+setInterval(cleanupExpiredStorage, 60 * 60 * 1000); // 每小时清理一次
+
+/**
+ * 存储NLUIProps配置并返回instanceId
+ * Store NLUIProps configuration and return instanceId
+ */
+export function storeNLUIProps(nluiProps: any): string {
+	const instanceId = randomUUID();
+	nluiPropsStorage.set(instanceId, nluiProps);
+	storageMetadata.set(instanceId, { timestamp: Date.now() });
+
+	logger.debug('Stored NLUIProps configuration', {
+		component: 'MCPServer',
+		action: 'storeNLUIProps',
+		metadata: { instanceId, storageSize: nluiPropsStorage.size }
+	});
+
+	return instanceId;
+}
+
+/**
+ * 根据instanceId获取NLUIProps配置
+ * Get NLUIProps configuration by instanceId
+ */
+export function getNLUIPropsById(instanceId: string): any | null {
+	const nluiProps = nluiPropsStorage.get(instanceId);
+
+	if (nluiProps) {
+		logger.debug('Retrieved NLUIProps configuration', {
+			component: 'MCPServer',
+			action: 'getNLUIPropsById',
+			metadata: { instanceId, found: true }
+		});
+		return nluiProps;
+	} else {
+		logger.warn('NLUIProps configuration not found', {
+			component: 'MCPServer',
+			action: 'getNLUIPropsById',
+			metadata: { instanceId, found: false }
+		});
+		return null;
+	}
+}
 
 /**
  * 创建NLUI MCP服务器实例
@@ -230,19 +304,18 @@ ${formatSchemaAsDocumentation('NLUIProps', nluiSchemas.NLUIProps)}
 			action: 'renderUIComponent',
 			metadata: args
 		});
-
 		try {
 			// 验证NLUI属性 (基本验证)
 			if (!args.nluiProps) {
 				throw ErrorHandler.createValidationError('nluiProps 必须是一个有效的对象');
 			}
 
-			// 编码NLUIProps配置
-			const encodedNLUIProps = encodeURIComponent(JSON.stringify(args.nluiProps));
+			// 存储nluiProps配置并获取instanceId
+			const instanceId = storeNLUIProps(args.nluiProps);
 
-			// 生成URL
+			// 生成包含instanceId的短URL
 			const baseUrl = process.env.NLUI_BASE_URL || 'http://localhost:5173';
-			const url = `${baseUrl}?nlui=${encodedNLUIProps}`;
+			const url = `${baseUrl}?instanceId=${instanceId}`;
 
 			// 构建渲染结果
 			const result: CallToolResult = {
@@ -251,7 +324,7 @@ ${formatSchemaAsDocumentation('NLUIProps', nluiSchemas.NLUIProps)}
 						type: 'resource' as const,
 						resource: {
 							uri: url,
-							text: `NLUI Interactive Interface: Generated UI interface based on provided configuration`,
+							text: `NLUI Interactive Interface: Generated UI interface with instance ID ${instanceId}`,
 							mimeType: 'text/html'
 						}
 					}

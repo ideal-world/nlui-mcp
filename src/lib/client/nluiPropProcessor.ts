@@ -1,52 +1,39 @@
+import { apiClient } from '$lib/utils/apiClient';
 import type { NLUIProps } from '../ui/nluiProps.types';
 
 /**
- * 从URL或sessionStorage获取NLUIProps配置
- * Get NLUIProps configuration from URL or sessionStorage
+ * 获取NLUIProps配置
+ * Get NLUIProps configuration
  *
- * @returns NLUIProps配置对象或null
+ * @returns NLUIProps配置对象
  */
-export function getNLUIProps(): NLUIProps {
+export async function getNLUIProps(): Promise<NLUIProps> {
 	if (typeof window === 'undefined') {
 		throw new Error('getNLUIProps can only be called in a browser environment');
 	}
 	try {
 		const urlParams = new URLSearchParams(window.location.search);
 
-		// 获取sessionId
+		// 检查是否有instanceId参数（新方式）
+		const instanceId = urlParams.get('instanceId');
+
+		if (instanceId) {
+			return await getNLUIPropsByInstanceId(instanceId);
+		}
+
+		// 获取sessionId（测试用）
 		const sessionId = urlParams.get('sessionId');
 		if (!sessionId) {
-			throw new Error('Missing sessionId in URL parameters');
+			throw new Error('Missing instanceId or sessionId in URL parameters');
 		}
 		const sessionStorageKey = `nluiProp_${sessionId}`;
 
-		// 1. 优先从URL参数中获取 nlui 配置
-		const nluiParam = urlParams.get('nlui');
-
-		if (nluiParam) {
-			const decoded = decodeURIComponent(nluiParam);
-			const parsed = JSON.parse(decoded);
-			if (isValidNLUIProps(parsed)) {
-				// 保存到sessionStorage以便后续使用
-				sessionStorage.setItem(sessionStorageKey, JSON.stringify(parsed));
-				return parsed;
-			} else {
-				throw new Error('Invalid NLUIProps structure from URL parameter');
-			}
-		}
-
-		// 2. 从sessionStorage中获取（使用当前URL的sessionId或default）
+		// 从sessionStorage中获取（使用当前URL的sessionId）
 		const sessionData = sessionStorage.getItem(sessionStorageKey);
 		if (!sessionData) {
 			throw new Error('Missing sessionData');
 		}
-
-		const parsed = JSON.parse(sessionData);
-		if (isValidNLUIProps(parsed)) {
-			return parsed;
-		} else {
-			throw new Error('Invalid NLUIProps structure in sessionStorage for sessionId: ' + sessionId);
-		}
+		return JSON.parse(sessionData);
 	} catch (error) {
 		console.error('Error parsing NLUIProps:', error);
 		throw error;
@@ -54,47 +41,20 @@ export function getNLUIProps(): NLUIProps {
 }
 
 /**
- * 验证NLUIProps对象的基本结构
- * Validate basic structure of NLUIProps object
+ * 通过instanceId从API获取NLUIProps配置
+ * Get NLUIProps configuration from API by instanceId
  */
-function isValidNLUIProps(obj: any): obj is NLUIProps {
-	return (
-		obj &&
-		typeof obj === 'object' &&
-		obj.block &&
-		typeof obj.block === 'object' &&
-		obj.block.main &&
-		typeof obj.block.main === 'object'
-	);
+async function getNLUIPropsByInstanceId(instanceId: string): Promise<NLUIProps> {
+	try {
+		return await apiClient.get(`/api/nlui/${instanceId}`);
+	} catch (error) {
+		console.error('Error fetching NLUIProps by instanceId:', error);
+		throw error;
+	}
 }
 
 /**
- * 生成示例NLUIProps配置
- * Generate example NLUIProps configuration
- */
-export function getExampleNLUIProps(): NLUIProps {
-	return {
-		showTools: true,
-		showDebug: true,
-		block: {
-			main: {
-				kind: 'card',
-				cardProps: {
-					title: 'Welcome to NLUI',
-					body: 'This is an example card component rendered by NLUI framework.',
-					footer: 'NLUI Framework v1.0'
-				}
-			}
-		}
-	};
-}
-
-/**
- * 将NLUIProps保存到sessionStorage
- * Save NLUIProps to sessionStorage
- *
- * @param props NLUIProps配置对象
- * @param sessionId 会话ID，默认为'default'
+ * 将NLUIProps保存到sessionStorage（测试用）
  */
 export function saveNLUIPropsToSession(props: NLUIProps, sessionId: string): void {
 	if (typeof window === 'undefined') {

@@ -9,21 +9,22 @@
 	let isLoading = $state(true);
 	let renderError: string = $state('');
 	let errorDetails: string = $state('');
-
 	$effect(() => {
 		if (typeof window !== 'undefined' && isLoading) {
-			try {
-				nluiProp = getNLUIProps();
-				renderError = '';
-				errorDetails = '';
-			} catch (error) {
-				console.error('Error loading NLUI prop:', error);
-				renderError = m.render_error_title();
-				errorDetails = error instanceof Error ? error.message : String(error);
-				nluiProp = null;
-			} finally {
-				isLoading = false;
-			}
+			(async () => {
+				try {
+					nluiProp = await getNLUIProps();
+					renderError = '';
+					errorDetails = '';
+				} catch (error) {
+					console.error('Error loading NLUI prop:', error);
+					renderError = m.render_error_title();
+					errorDetails = error instanceof Error ? error.message : String(error);
+					nluiProp = null;
+				} finally {
+					isLoading = false;
+				}
+			})();
 		}
 	});
 </script>

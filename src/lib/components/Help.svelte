@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { saveNLUIPropsToSession } from '$lib/client/nluiPropProcessor';
+	import type { NLUIProps } from '$lib/ui/nluiProps.types';
 	import * as m from '../../paraglide/messages';
-	import { getExampleNLUIProps, saveNLUIPropsToSession } from '../client/nluiPropProcessor';
 	import Card from '../ui/components/card.svelte';
 	import type { NLUICardComponentProps } from '../ui/components/card.types.js';
 	import Table from '../ui/components/table.svelte';
@@ -115,8 +116,22 @@
 		]
 	};
 
+	const exampleProp: NLUIProps = {
+		showTools: true,
+		showDebug: true,
+		block: {
+			main: {
+				kind: 'card',
+				cardProps: {
+					title: 'Welcome to NLUI',
+					body: 'This is an example card component rendered by NLUI framework.',
+					footer: 'NLUI Framework v1.0'
+				}
+			}
+		}
+	};
+
 	function tryExample() {
-		const exampleProp = getExampleNLUIProps();
 		const sessionId = 'demo-session';
 
 		// 先保存到 sessionStorage
@@ -250,9 +265,7 @@
 				</h2>
 
 				<div class="bg-base-200 rounded-lg p-4">
-					<pre class="text-base-content overflow-x-auto text-sm"><code
-							>{JSON.stringify(getExampleNLUIProps(), null, 2)}</code
-						></pre>
+					<pre class="text-base-content overflow-x-auto text-sm"><code>{JSON.stringify(exampleProp, null, 2)}</code></pre>
 				</div>
 
 				<div class="mt-4 flex gap-4">
