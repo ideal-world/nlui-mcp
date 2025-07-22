@@ -31,6 +31,10 @@
   "prettier.useEditorConfig": false,
   "svelte.enable-ts-plugin": true,
   "cSpell.words": [
+    "flyonui",
+    "iconify",
+    "inlang",
+    "mdsvex",
     "modelcontextprotocol",
     "NLUI",
     "Paraglide",
