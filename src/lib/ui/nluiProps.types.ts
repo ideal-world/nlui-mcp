@@ -1,9 +1,12 @@
 import type { BaseComponentProps } from './common/base.types';
-import type { NLUIAlertComponentProps } from './components/alert.types';
+import type { NLUIAudioComponentProps } from './components/audio.types';
 import type { NLUICardComponentProps } from './components/card.types';
 import type { NLUIFormComponentProps } from './components/form.types';
+import type { NLUIImageComponentProps } from './components/image.types';
 import type { NLUIListComponentProps } from './components/list.types';
+import type { NLUIMarkdownComponentProps } from './components/markdown.types';
 import type { NLUITableComponentProps } from './components/table.types';
+import type { NLUIVideoComponentProps } from './components/video.types';
 
 export interface NLUIProps {
 	/** Layout structure with header, footer, sidebars, and main content */
@@ -32,11 +35,10 @@ export interface NLUIBlock {
 
 export type NLUIComponentKind =
 	| 'card'
-	| 'alert'
 	| 'image'
 	| 'video'
 	| 'audio'
-	| 'code'
+	| 'markdown'
 	| 'table'
 	| 'list'
 	| 'chart'
@@ -61,6 +63,12 @@ export interface NLUIComponent extends BaseComponentProps {
 	formProps?: NLUIFormComponentProps;
 	/** @conditional kind === "list" */
 	listProps?: NLUIListComponentProps;
-	/** @conditional kind === "alert" */
-	alertProps?: NLUIAlertComponentProps;
+	/** @conditional kind === "image" */
+	imageProps?: NLUIImageComponentProps;
+	/** @conditional kind === "video" */
+	videoProps?: NLUIVideoComponentProps;
+	/** @conditional kind === "audio" */
+	audioProps?: NLUIAudioComponentProps;
+	/** @conditional kind === "markdown" */
+	markdownProps?: NLUIMarkdownComponentProps;
 }

@@ -69,7 +69,7 @@ export class ApiClient {
 	 * 发送HTTP请求
 	 * Send HTTP request
 	 */
-	private async sendRequest<T>(
+	 async sendRequest<T>(
 		endpoint: string,
 		config: ApiRequestConfig = {}
 	): Promise<ApiResponse<T>> {
