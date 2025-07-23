@@ -118,5 +118,14 @@
 	"validation_integer": "{field} must be an integer",
 	"validation_min_value": "{field} cannot be less than {min}",
 	"validation_max_value": "{field} cannot be greater than {max}",
-	"validation_pattern": "{field} format is incorrect"
+	"validation_pattern": "{field} format is incorrect",
+	"table_search_placeholder": "Search...",
+	"table_clear_search": "Clear search",
+	"table_showing": "Showing",
+	"table_of": "of",
+	"table_item": "item",
+	"table_items": "items",
+	"table_previous_page": "Previous page",
+	"table_next_page": "Next page",
+	"table_page": "Page {page}"
 }

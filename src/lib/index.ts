@@ -11,6 +11,5 @@ export * from './ui/nluiProps.types';
 export { default as UIContainer } from './components/UIContainer.svelte';
 export { default as ComponentRenderer } from './components/ComponentRenderer.svelte';
 export { default as RenderError } from './components/RenderError.svelte';
-export { default as Help } from './components/Help.svelte';
 export { default as LanguageSwitcher } from './components/LanguageSwitcher.svelte';
 export { default as ThemeSwitcher } from './components/ThemeSwitcher.svelte';

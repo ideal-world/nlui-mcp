@@ -1,12 +1,15 @@
 <script lang="ts">
-	import Alert from '../ui/components/alert.svelte';
+	import * as m from '../../paraglide/messages';
+	import Audio from '../ui/components/audio.svelte';
 	import Card from '../ui/components/card.svelte';
 	import Form from '../ui/components/form.svelte';
+	import Image from '../ui/components/image.svelte';
 	import List from '../ui/components/list.svelte';
+	import Markdown from '../ui/components/markdown.svelte';
 	import Table from '../ui/components/table.svelte';
+	import Video from '../ui/components/video.svelte';
 	import type { NLUIComponent } from '../ui/nluiProps.types';
 	import RenderError from './RenderError.svelte';
-	import * as m from '../../paraglide/messages';
 
 	interface Props {
 		component: NLUIComponent;
@@ -37,10 +40,24 @@
 				if (!component.listProps) {
 					throw new Error('List component missing listProps');
 				}
-			} else if (component.kind === 'alert') {
-				if (!component.alertProps) {
-					throw new Error('Alert component missing alertProps');
+			} else if (component.kind === 'image') {
+				if (!component.imageProps) {
+					throw new Error('Image component missing imageProps');
 				}
+			} else if (component.kind === 'video') {
+				if (!component.videoProps) {
+					throw new Error('Video component missing videoProps');
+				}
+			} else if (component.kind === 'audio') {
+				if (!component.audioProps) {
+					throw new Error('Audio component missing audioProps');
+				}
+			} else if (component.kind === 'markdown') {
+				if (!component.markdownProps) {
+					throw new Error('Markdown component missing markdownProps');
+				}
+			} else {
+				throw new Error(`Unknown component kind: ${component.kind}`);
 			}
 			// 如果验证通过，设置可以渲染
 			hasError = false;
@@ -72,10 +89,15 @@
 	<Form {...component.formProps} />
 {:else if component.kind === 'list' && component.listProps}
 	<List {...component.listProps} />
-{:else if component.kind === 'alert' && component.alertProps}
-	<Alert {...component.alertProps} />
+{:else if component.kind === 'image' && component.imageProps}
+	<Image {...component.imageProps} />
+{:else if component.kind === 'video' && component.videoProps}
+	<Video {...component.videoProps} />
+{:else if component.kind === 'audio' && component.audioProps}
+	<Audio {...component.audioProps} />
+{:else if component.kind === 'markdown' && component.markdownProps}
+	<Markdown {...component.markdownProps} />
 {:else}
-	<!-- fallback for unknown types -->
 	<Card
 		title="组件开发中 / Component In Development"
 		body="组件类型 '{component.kind}' 正在开发中，敬请期待。/ Component type '{component.kind}' is under development, stay tuned."
