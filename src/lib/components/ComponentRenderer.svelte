@@ -4,7 +4,6 @@
 	import Card from '../ui/components/card.svelte';
 	import Form from '../ui/components/form.svelte';
 	import Image from '../ui/components/image.svelte';
-	import List from '../ui/components/list.svelte';
 	import Markdown from '../ui/components/markdown.svelte';
 	import Table from '../ui/components/table.svelte';
 	import Video from '../ui/components/video.svelte';
@@ -35,10 +34,6 @@
 			} else if (component.kind === 'form') {
 				if (!component.formProps) {
 					throw new Error('Form component missing formProps');
-				}
-			} else if (component.kind === 'list') {
-				if (!component.listProps) {
-					throw new Error('List component missing listProps');
 				}
 			} else if (component.kind === 'image') {
 				if (!component.imageProps) {
@@ -87,8 +82,6 @@
 	<Table {...component.tableProps} />
 {:else if component.kind === 'form' && component.formProps}
 	<Form {...component.formProps} />
-{:else if component.kind === 'list' && component.listProps}
-	<List {...component.listProps} />
 {:else if component.kind === 'image' && component.imageProps}
 	<Image {...component.imageProps} />
 {:else if component.kind === 'video' && component.videoProps}

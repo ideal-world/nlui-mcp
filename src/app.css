@@ -13,7 +13,7 @@
 @import 'flyonui/variants.css';
 
 /* 导入 FlyonUI 核心组件 / Import FlyonUI core components */
-@source "../node_modules/flyonui/flyonui/index.js";
+@source "../node_modules/flyonui/flyonui.js";
 
 /* 
  * 导入第三方插件样式覆盖 

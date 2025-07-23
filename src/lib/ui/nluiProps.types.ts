@@ -3,7 +3,6 @@ import type { NLUIAudioComponentProps } from './components/audio.types';
 import type { NLUICardComponentProps } from './components/card.types';
 import type { NLUIFormComponentProps } from './components/form.types';
 import type { NLUIImageComponentProps } from './components/image.types';
-import type { NLUIListComponentProps } from './components/list.types';
 import type { NLUIMarkdownComponentProps } from './components/markdown.types';
 import type { NLUITableComponentProps } from './components/table.types';
 import type { NLUIVideoComponentProps } from './components/video.types';
@@ -34,13 +33,13 @@ export interface NLUIBlock {
 }
 
 export type NLUIComponentKind =
-	| 'card'
 	| 'image'
 	| 'video'
 	| 'audio'
 	| 'markdown'
 	| 'table'
-	| 'list'
+	| 'form'
+	| 'card'
 	| 'chart'
 	| 'calendar'
 	| 'timeline'
@@ -48,7 +47,6 @@ export type NLUIComponentKind =
 	| 'gantt'
 	| 'gallery'
 	| 'map'
-	| 'form'
 	| 'diagram'
 	| 'mindmap';
 
@@ -61,8 +59,6 @@ export interface NLUIComponent extends BaseComponentProps {
 	tableProps?: NLUITableComponentProps;
 	/** @conditional kind === "form" */
 	formProps?: NLUIFormComponentProps;
-	/** @conditional kind === "list" */
-	listProps?: NLUIListComponentProps;
 	/** @conditional kind === "image" */
 	imageProps?: NLUIImageComponentProps;
 	/** @conditional kind === "video" */

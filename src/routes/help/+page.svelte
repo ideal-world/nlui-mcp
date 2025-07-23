@@ -4,6 +4,8 @@
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import Card from '$lib/ui/components/card.svelte';
 	import type { NLUICardComponentProps } from '$lib/ui/components/card.types.js';
+	import Form from '$lib/ui/components/form.svelte';
+	import type { NLUIFormComponentProps } from '$lib/ui/components/form.types.js';
 	import Table from '$lib/ui/components/table.svelte';
 	import type { NLUITableComponentProps } from '$lib/ui/components/table.types.js';
 	import type { NLUIProps } from '$lib/ui/nluiProps.types';
@@ -201,6 +203,149 @@
 		]
 	};
 
+	// Form示例数据 / Form example data
+	const basicFormData: NLUIFormComponentProps = {
+		title: 'User Registration Form',
+		fields: [
+			{
+				name: 'firstName',
+				label: 'First Name',
+				type: 'text',
+				required: true,
+				placeholder: 'Enter your first name',
+				validation: {
+					min: 2,
+					max: 50
+				}
+			},
+			{
+				name: 'lastName',
+				label: 'Last Name',
+				type: 'text',
+				required: true,
+				placeholder: 'Enter your last name',
+				validation: {
+					min: 2,
+					max: 50
+				}
+			},
+			{
+				name: 'email',
+				label: 'Email Address',
+				type: 'email',
+				required: true,
+				placeholder: 'Enter your email address',
+				helpText: 'We will never share your email with anyone else.'
+			},
+			{
+				name: 'password',
+				label: 'Password',
+				type: 'password',
+				required: true,
+				placeholder: 'Create a strong password',
+				validation: {
+					min: 8,
+					max: 100,
+					pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$'
+				},
+				helpText: 'Password must contain at least 8 characters with uppercase, lowercase, and number.'
+			},
+			{
+				name: 'age',
+				label: 'Age',
+				type: 'number',
+				required: true,
+				validation: {
+					min: 20,
+					max: 120
+				}
+			},
+			{
+				name: 'country',
+				label: 'Country',
+				type: 'select',
+				required: true,
+				options: [
+					{ label: 'Select Country', value: '' },
+					{ label: 'United States', value: 'us' },
+					{ label: 'China', value: 'cn' },
+					{ label: 'United Kingdom', value: 'uk' },
+					{ label: 'Germany', value: 'de' },
+					{ label: 'Japan', value: 'jp' }
+				]
+			},
+			{
+				name: 'bio',
+				label: 'Biography',
+				type: 'textarea',
+				placeholder: 'Tell us about yourself...',
+				validation: {
+					max: 500
+				},
+				helpText: 'Optional. Maximum 500 characters.'
+			},
+			{
+				name: 'newsletter',
+				label: 'Subscribe to Newsletter',
+				type: 'checkbox',
+				defaultValue: true,
+				helpText: 'Receive updates about new features and products.'
+			},
+			{
+				name: 'gender',
+				label: 'Gender',
+				type: 'radio',
+				options: [
+					{ label: 'Male', value: 'male' },
+					{ label: 'Female', value: 'female' },
+					{ label: 'Other', value: 'other' },
+					{ label: 'Prefer not to say', value: 'not_specified' }
+				]
+			}
+		],
+		submitAction: {
+			label: 'Create Account',
+			linkUrl: '/api/register',
+			target: '_self'
+		}
+	};
+
+	const simpleFormData: NLUIFormComponentProps = {
+		title: 'Contact Form',
+		fields: [
+			{
+				name: 'name',
+				label: 'Name',
+				type: 'text',
+				required: true,
+				placeholder: 'Your name'
+			},
+			{
+				name: 'email',
+				label: 'Email',
+				type: 'email',
+				required: true,
+				placeholder: 'your@email.com'
+			},
+			{
+				name: 'message',
+				label: 'Message',
+				type: 'textarea',
+				required: true,
+				placeholder: 'Your message...',
+				validation: {
+					min: 10,
+					max: 1000
+				}
+			}
+		],
+		submitAction: {
+			label: 'Send Message',
+			linkUrl: '/api/contact',
+			target: '_self'
+		}
+	};
+
 	const exampleProp: NLUIProps = {
 		showTools: true,
 		showDebug: true,
@@ -275,6 +420,30 @@
 			window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
 		}, 100);
 	}
+
+	function tryFormExample() {
+		// 创建包含form组件的示例配置
+		const formExampleProp = {
+			showTools: true,
+			showDebug: true,
+			block: {
+				main: {
+					kind: 'form' as const,
+					formProps: basicFormData
+				}
+			}
+		};
+
+		const sessionId = 'form-demo';
+
+		// 先保存到 sessionStorage
+		saveNLUIPropsToSession(formExampleProp, sessionId);
+
+		// 确保保存完成后再刷新，添加URL参数以确保重新检测
+		setTimeout(() => {
+			window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
+		}, 100);
+	}
 </script>
 
 <svelte:head>
@@ -341,9 +510,7 @@
 						<p class="text-secondary/70 mb-3 text-sm">
 							{m.help_session_storage_description()}
 						</p>
-						<code class="bg-secondary/20 text-secondary block rounded p-2 text-xs">
-							sessionStorage.setItem('nluiProp_' + sessionId, JSON.stringify(config))
-						</code>
+						<code class="bg-secondary/20 text-secondary block rounded p-2 text-xs"> sessionStorage.setItem('nluiProp_' + sessionId, JSON.stringify(config)) </code>
 					</div>
 				</div>
 			</div>
@@ -355,9 +522,7 @@
 				</h2>
 
 				<div class="bg-base-200 rounded-lg p-4">
-					<pre class="text-base-content overflow-x-auto text-sm"><code
-							>{JSON.stringify(exampleProp, null, 2)}</code
-						></pre>
+					<pre class="text-base-content overflow-x-auto text-sm"><code>{JSON.stringify(exampleProp, null, 2)}</code></pre>
 				</div>
 
 				<div class="mt-4 flex gap-4">
@@ -370,10 +535,7 @@
 			<!-- Card组件示例 / Card Component Examples -->
 			<div class="bg-base-100 rounded-lg p-6 shadow-lg">
 				<h2 class="text-base-content mb-4 text-2xl font-bold">Card Components</h2>
-				<p class="text-base-content/70 mb-6">
-					Card components are versatile containers for displaying content with optional actions,
-					images, and layouts.
-				</p>
+				<p class="text-base-content/70 mb-6">Card components are versatile containers for displaying content with optional actions, images, and layouts.</p>
 
 				<div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
 					{#each cardExamples as cardData}
@@ -391,10 +553,7 @@
 			<!-- Table组件示例 / Table Component Examples -->
 			<div class="bg-base-100 rounded-lg p-6 shadow-lg">
 				<h2 class="text-base-content mb-4 text-2xl font-bold">Table Components</h2>
-				<p class="text-base-content/70 mb-6">
-					Table components provide flexible data display with sorting, actions, and various styling
-					options.
-				</p>
+				<p class="text-base-content/70 mb-6">Table components provide flexible data display with sorting, actions, and various styling options.</p>
 
 				<!-- 功能丰富的表格 / Feature-rich Table -->
 				<div class="mb-8">
@@ -410,6 +569,34 @@
 
 				<div class="flex gap-4">
 					<button class="btn btn-primary" onclick={tryTableExample}>
+						{m.help_try_example()}
+					</button>
+				</div>
+			</div>
+
+			<!-- Form组件示例 / Form Component Examples -->
+			<div class="bg-base-100 rounded-lg p-6 shadow-lg">
+				<h2 class="text-base-content mb-4 text-2xl font-bold">Form Components</h2>
+				<p class="text-base-content/70 mb-6">Form components provide comprehensive input handling with validation, various field types, and user-friendly interfaces for data collection.</p>
+
+				<!-- 功能丰富的表单 / Feature-rich Form -->
+				<div class="mb-8">
+					<h3 class="mb-4 text-lg font-semibold">Registration Form</h3>
+					<div class="max-w-2xl">
+						<Form {...basicFormData} />
+					</div>
+				</div>
+
+				<!-- 简单表单 / Simple Form -->
+				<div class="mb-8">
+					<h3 class="mb-4 text-lg font-semibold">Contact Form</h3>
+					<div class="max-w-lg">
+						<Form {...simpleFormData} />
+					</div>
+				</div>
+
+				<div class="flex gap-4">
+					<button class="btn btn-primary" onclick={tryFormExample}>
 						{m.help_try_example()}
 					</button>
 				</div>
