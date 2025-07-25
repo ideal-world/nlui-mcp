@@ -1,3 +1,4 @@
+import { generateUUID } from '$lib/utils';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import z from 'zod';
@@ -5,7 +6,6 @@ import { ErrorHandler } from '../utils/errorHandler';
 import { logger } from '../utils/logger';
 import { formatSchemaAsDocumentation } from './dynamicTypeGenerator';
 import { nluiSchemas } from './generated/schemas';
-import { randomUUID } from 'crypto';
 
 /**
  * 内存存储，用于保存NLUIProps配置
@@ -21,18 +21,18 @@ const storageMetadata = new Map<string, { timestamp: number }>();
 const STORAGE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 function cleanupExpiredStorage() {
-	const now = Date.now();
-	for (const [instanceId, metadata] of storageMetadata.entries()) {
-		if (now - metadata.timestamp > STORAGE_EXPIRY_MS) {
-			nluiPropsStorage.delete(instanceId);
-			storageMetadata.delete(instanceId);
-			logger.debug('Cleaned up expired storage item', {
-				component: 'MCPServer',
-				action: 'cleanupStorage',
-				metadata: { instanceId }
-			});
-		}
-	}
+  const now = Date.now();
+  for (const [instanceId, metadata] of storageMetadata.entries()) {
+    if (now - metadata.timestamp > STORAGE_EXPIRY_MS) {
+      nluiPropsStorage.delete(instanceId);
+      storageMetadata.delete(instanceId);
+      logger.debug('Cleaned up expired storage item', {
+        component: 'MCPServer',
+        action: 'cleanupStorage',
+        metadata: { instanceId }
+      });
+    }
+  }
 }
 
 // 定期清理过期项
@@ -43,17 +43,17 @@ setInterval(cleanupExpiredStorage, 60 * 60 * 1000); // 每小时清理一次
  * Store NLUIProps configuration and return instanceId
  */
 export function storeNLUIProps(nluiProps: any): string {
-	const instanceId = randomUUID();
-	nluiPropsStorage.set(instanceId, nluiProps);
-	storageMetadata.set(instanceId, { timestamp: Date.now() });
+  const instanceId = generateUUID();
+  nluiPropsStorage.set(instanceId, nluiProps);
+  storageMetadata.set(instanceId, { timestamp: Date.now() });
 
-	logger.debug('Stored NLUIProps configuration', {
-		component: 'MCPServer',
-		action: 'storeNLUIProps',
-		metadata: { instanceId, storageSize: nluiPropsStorage.size }
-	});
+  logger.debug('Stored NLUIProps configuration', {
+    component: 'MCPServer',
+    action: 'storeNLUIProps',
+    metadata: { instanceId, storageSize: nluiPropsStorage.size }
+  });
 
-	return instanceId;
+  return instanceId;
 }
 
 /**
@@ -61,23 +61,23 @@ export function storeNLUIProps(nluiProps: any): string {
  * Get NLUIProps configuration by instanceId
  */
 export function getNLUIPropsById(instanceId: string): any | null {
-	const nluiProps = nluiPropsStorage.get(instanceId);
+  const nluiProps = nluiPropsStorage.get(instanceId);
 
-	if (nluiProps) {
-		logger.debug('Retrieved NLUIProps configuration', {
-			component: 'MCPServer',
-			action: 'getNLUIPropsById',
-			metadata: { instanceId, found: true }
-		});
-		return nluiProps;
-	} else {
-		logger.warn('NLUIProps configuration not found', {
-			component: 'MCPServer',
-			action: 'getNLUIPropsById',
-			metadata: { instanceId, found: false }
-		});
-		return null;
-	}
+  if (nluiProps) {
+    logger.debug('Retrieved NLUIProps configuration', {
+      component: 'MCPServer',
+      action: 'getNLUIPropsById',
+      metadata: { instanceId, found: true }
+    });
+    return nluiProps;
+  } else {
+    logger.warn('NLUIProps configuration not found', {
+      component: 'MCPServer',
+      action: 'getNLUIPropsById',
+      metadata: { instanceId, found: false }
+    });
+    return null;
+  }
 }
 
 /**
@@ -85,18 +85,18 @@ export function getNLUIPropsById(instanceId: string): any | null {
  * Create NLUI MCP Server instance
  */
 const server = new McpServer({
-	name: 'nlui-mcp-server',
-	version: '1.0.0'
+  name: 'nlui-mcp-server',
+  version: '1.0.0'
 });
 
 // 记录服务器启动
 logger.info('NLUI MCP Server starting', {
-	component: 'MCPServer',
-	action: 'startup',
-	metadata: {
-		serverName: 'nlui-mcp-server',
-		version: '1.0.0'
-	}
+  component: 'MCPServer',
+  action: 'startup',
+  metadata: {
+    serverName: 'nlui-mcp-server',
+    version: '1.0.0'
+  }
 });
 
 /**
@@ -104,12 +104,12 @@ logger.info('NLUI MCP Server starting', {
  * Generate Chinese system prompt
  */
 function generateSystemPromptZH(): string {
-	logger.debug('Generating Chinese system prompt', {
-		component: 'MCPServer',
-		action: 'generatePrompt'
-	});
+  logger.debug('Generating Chinese system prompt', {
+    component: 'MCPServer',
+    action: 'generatePrompt'
+  });
 
-	return `# NLUI MCP 系统初始化
+  return `# NLUI MCP 系统初始化
 
 您现在连接到 NLUI (Natural Language User Interface) MCP 服务器。
 
@@ -175,57 +175,57 @@ function generateSystemPromptZH(): string {
  * Session initialization prompt - provides system context and available tools
  */
 server.prompt(
-	'init-session',
-	'初始化会话系统提示 / Initialize session system prompt',
-	{
-		language: z.string().optional()
-	},
-	async ({ language = 'zh' }) => {
-		const startTime = Date.now();
+  'init-session',
+  '初始化会话系统提示 / Initialize session system prompt',
+  {
+    language: z.string().optional()
+  },
+  async ({ language = 'zh' }) => {
+    const startTime = Date.now();
 
-		logger.info('Session initialization requested', {
-			component: 'MCPServer',
-			action: 'initSession',
-			metadata: { language }
-		});
+    logger.info('Session initialization requested', {
+      component: 'MCPServer',
+      action: 'initSession',
+      metadata: { language }
+    });
 
-		try {
-			// TODO
-			const systemPrompt = generateSystemPromptZH();
+    try {
+      // TODO
+      const systemPrompt = generateSystemPromptZH();
 
-			const result = {
-				messages: [
-					{
-						role: 'user' as const,
-						content: {
-							type: 'text' as const,
-							text: systemPrompt
-						}
-					}
-				]
-			};
+      const result = {
+        messages: [
+          {
+            role: 'user' as const,
+            content: {
+              type: 'text' as const,
+              text: systemPrompt
+            }
+          }
+        ]
+      };
 
-			const duration = Date.now() - startTime;
-			logger.info('Session initialization completed', {
-				component: 'MCPServer',
-				action: 'initSession',
-				duration,
-				metadata: { language, promptLength: systemPrompt.length }
-			});
+      const duration = Date.now() - startTime;
+      logger.info('Session initialization completed', {
+        component: 'MCPServer',
+        action: 'initSession',
+        duration,
+        metadata: { language, promptLength: systemPrompt.length }
+      });
 
-			return result;
-		} catch (error) {
-			const duration = Date.now() - startTime;
-			const handledError = ErrorHandler.handle(error, {
-				component: 'MCPServer',
-				action: 'initSession',
-				duration,
-				metadata: { language }
-			});
+      return result;
+    } catch (error) {
+      const duration = Date.now() - startTime;
+      const handledError = ErrorHandler.handle(error, {
+        component: 'MCPServer',
+        action: 'initSession',
+        duration,
+        metadata: { language }
+      });
 
-			throw handledError.originalError;
-		}
-	}
+      throw handledError.originalError;
+    }
+  }
 );
 
 /**
@@ -233,8 +233,8 @@ server.prompt(
  * UI component rendering tool
  */
 server.tool(
-	'ui-render',
-	`根据NLUIProps配置生成渲染界面的URL / Generate UI rendering URL based on NLUIProps configuration
+  'ui-render',
+  `根据NLUIProps配置生成渲染界面的URL / Generate UI rendering URL based on NLUIProps configuration
 
 该工具接受符合NLUI规范的配置对象，并生成可访问的交互式Web界面。
 
@@ -289,88 +289,88 @@ ${formatSchemaAsDocumentation('NLUIProps', nluiSchemas.NLUIProps)}
     "showDebug": false
   }
 }`,
-	{
-		nluiProps: z.object({
-			block: z.record(z.any()),
-			showTools: z.boolean().optional(),
-			showDebug: z.boolean().optional()
-		})
-	},
-	async (args) => {
-		const startTime = Date.now();
+  {
+    nluiProps: z.object({
+      block: z.record(z.any()),
+      showTools: z.boolean().optional(),
+      showDebug: z.boolean().optional()
+    })
+  },
+  async (args) => {
+    const startTime = Date.now();
 
-		logger.info('UI component rendering requested', {
-			component: 'MCPServer',
-			action: 'renderUIComponent',
-			metadata: args
-		});
-		try {
-			// 验证NLUI属性 (基本验证)
-			if (!args.nluiProps) {
-				throw ErrorHandler.createValidationError('nluiProps 必须是一个有效的对象');
-			}
+    logger.info('UI component rendering requested', {
+      component: 'MCPServer',
+      action: 'renderUIComponent',
+      metadata: args
+    });
+    try {
+      // 验证NLUI属性 (基本验证)
+      if (!args.nluiProps) {
+        throw ErrorHandler.createValidationError('nluiProps 必须是一个有效的对象');
+      }
 
-			// 存储nluiProps配置并获取instanceId
-			const instanceId = storeNLUIProps(args.nluiProps);
+      // 存储nluiProps配置并获取instanceId
+      const instanceId = storeNLUIProps(args.nluiProps);
 
-			// 生成包含instanceId的短URL
-			const baseUrl = process.env.NLUI_BASE_URL || 'http://localhost:5173';
-			const url = `${baseUrl}?instanceId=${instanceId}`;
+      // 生成包含instanceId的短URL
+      const baseUrl = process.env.NLUI_BASE_URL || 'http://localhost:5173';
+      const url = `${baseUrl}?instanceId=${instanceId}`;
 
-			// 构建渲染结果
-			const result: CallToolResult = {
-				content: [
-					{
-						type: 'resource' as const,
-						resource: {
-							uri: url,
-							text: `NLUI Interactive Interface: Generated UI interface with instance ID ${instanceId}`,
-							mimeType: 'text/html'
-						}
-					}
-				]
-			};
+      // 构建渲染结果
+      const result: CallToolResult = {
+        content: [
+          {
+            type: 'resource' as const,
+            resource: {
+              uri: url,
+              text: `NLUI Interactive Interface: Generated UI interface with instance ID ${instanceId}`,
+              mimeType: 'text/html'
+            }
+          }
+        ]
+      };
 
-			const duration = Date.now() - startTime;
-			logger.info('UI component rendering completed', {
-				component: 'MCPServer',
-				action: 'renderUIComponent',
-				duration,
-				metadata: {
-					success: true,
-					resultSize: JSON.stringify(result).length
-				}
-			});
+      const duration = Date.now() - startTime;
+      logger.info('UI component rendering completed', {
+        component: 'MCPServer',
+        action: 'renderUIComponent',
+        duration,
+        metadata: {
+          success: true,
+          resultSize: JSON.stringify(result).length
+        }
+      });
 
-			return result;
-		} catch (error) {
-			const duration = Date.now() - startTime;
-			const handledError = ErrorHandler.handle(error, {
-				component: 'MCPServer',
-				action: 'renderUIComponent',
-				duration,
-				metadata: args
-			});
+      return result;
+    } catch (error) {
+      const duration = Date.now() - startTime;
+      const handledError = ErrorHandler.handle(error, {
+        component: 'MCPServer',
+        action: 'renderUIComponent',
+        duration,
+        metadata: args
+      });
 
-			// 返回错误信息给客户端
-			return {
-				content: [
-					{
-						type: 'text',
-						text: JSON.stringify(
-							{
-								type: 'error',
-								message: handledError.getUserMessage(),
-								timestamp: new Date().toISOString()
-							},
-							null,
-							2
-						)
-					}
-				]
-			};
-		}
-	}
+      // 返回错误信息给客户端
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                type: 'error',
+                message: handledError.getUserMessage(),
+                timestamp: new Date().toISOString()
+              },
+              null,
+              2
+            )
+          }
+        ]
+      };
+    }
+  }
 );
 
 /**
@@ -378,30 +378,30 @@ ${formatSchemaAsDocumentation('NLUIProps', nluiSchemas.NLUIProps)}
  * Start the server
  */
 export async function startServer(transport?: any): Promise<void> {
-	try {
-		if (transport) {
-			await server.connect(transport);
-		}
+  try {
+    if (transport) {
+      await server.connect(transport);
+    }
 
-		logger.info('NLUI MCP Server started successfully', {
-			component: 'MCPServer',
-			action: 'startup',
-			metadata: { status: 'connected', hasTransport: !!transport }
-		});
-	} catch (error) {
-		const handledError = ErrorHandler.handle(error, {
-			component: 'MCPServer',
-			action: 'startup'
-		});
+    logger.info('NLUI MCP Server started successfully', {
+      component: 'MCPServer',
+      action: 'startup',
+      metadata: { status: 'connected', hasTransport: !!transport }
+    });
+  } catch (error) {
+    const handledError = ErrorHandler.handle(error, {
+      component: 'MCPServer',
+      action: 'startup'
+    });
 
-		logger.error('Failed to start NLUI MCP Server', handledError.originalError, {
-			component: 'MCPServer',
-			action: 'startup',
-			metadata: { status: 'failed' }
-		});
+    logger.error('Failed to start NLUI MCP Server', handledError.originalError, {
+      component: 'MCPServer',
+      action: 'startup',
+      metadata: { status: 'failed' }
+    });
 
-		throw handledError.originalError;
-	}
+    throw handledError.originalError;
+  }
 }
 
 /**
@@ -409,28 +409,28 @@ export async function startServer(transport?: any): Promise<void> {
  * Stop the server
  */
 export async function stopServer(): Promise<void> {
-	try {
-		await server.close();
+  try {
+    await server.close();
 
-		logger.info('NLUI MCP Server stopped successfully', {
-			component: 'MCPServer',
-			action: 'shutdown',
-			metadata: { status: 'closed' }
-		});
-	} catch (error) {
-		const handledError = ErrorHandler.handle(error, {
-			component: 'MCPServer',
-			action: 'shutdown'
-		});
+    logger.info('NLUI MCP Server stopped successfully', {
+      component: 'MCPServer',
+      action: 'shutdown',
+      metadata: { status: 'closed' }
+    });
+  } catch (error) {
+    const handledError = ErrorHandler.handle(error, {
+      component: 'MCPServer',
+      action: 'shutdown'
+    });
 
-		logger.error('Error stopping NLUI MCP Server', handledError.originalError, {
-			component: 'MCPServer',
-			action: 'shutdown',
-			metadata: { status: 'error' }
-		});
+    logger.error('Error stopping NLUI MCP Server', handledError.originalError, {
+      component: 'MCPServer',
+      action: 'shutdown',
+      metadata: { status: 'error' }
+    });
 
-		throw handledError.originalError;
-	}
+    throw handledError.originalError;
+  }
 }
 
 export { server };

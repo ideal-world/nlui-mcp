@@ -205,6 +205,7 @@
 
   // Form示例数据 / Form example data
   const basicFormData: NLUIFormComponentProps = {
+    size: 'sm',
     title: 'User Registration Form',
     fields: [
       {
@@ -212,6 +213,7 @@
         label: 'First Name',
         type: 'text',
         required: true,
+        defaultValue: 'John',
         placeholder: 'Enter your first name',
         validation: {
           min: 2,
@@ -255,6 +257,7 @@
         label: 'Age',
         type: 'number',
         required: true,
+        defaultValue: 21,
         validation: {
           min: 20,
           max: 120
@@ -288,6 +291,7 @@
         name: 'newsletter',
         label: 'Subscribe to Newsletter',
         type: 'checkbox',
+        multiple: true,
         options: [
           { label: 'Product Updates', value: 'product_updates' },
           { label: 'Feature Announcements', value: 'feature_announcements' },
@@ -295,6 +299,13 @@
           { label: 'Promotions', value: 'promotions' }
         ],
         defaultValue: ['product_updates', 'feature_announcements'],
+        helpText: 'Select the types of newsletter you want to receive.'
+      },
+      {
+        name: 'isChecked',
+        label: 'Is Checked',
+        type: 'checkbox',
+        defaultValue: true,
         helpText: 'Select the types of newsletter you want to receive.'
       },
       {
@@ -307,6 +318,14 @@
           { label: 'Other', value: 'other' },
           { label: 'Prefer not to say', value: 'not_specified' }
         ]
+      },
+      {
+        name: 'fileUpload',
+        label: 'File Upload',
+        type: 'file',
+        multiple: true,
+        required: true,
+        helpText: 'Upload your profile picture.'
       }
     ],
     submitAction: {

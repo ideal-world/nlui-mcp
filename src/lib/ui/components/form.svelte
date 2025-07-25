@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { generateUUID } from '$lib/utils';
   import * as m from '../../../paraglide/messages';
   import { logger } from '../../utils/logger';
   import { FormValidator } from '../../utils/validation';
@@ -10,6 +11,7 @@
   let formData = $state<Record<string, any>>({});
   let errors = $state<Record<string, string>>({});
   let isSubmitting = $state(false);
+  let instanceId = generateUUID();
 
   $effect(() => {
     const initialData: Record<string, any> = {};
@@ -46,7 +48,22 @@
    * Handle field value change
    */
   function handleFieldChange(fieldName: string, value: any): void {
-    if (formProps.fields.find((field) => field.name === fieldName)?.type === 'checkbox') {
+    const field = formProps.fields.find((f) => f.name === fieldName);
+    if (!field) {
+      logger.warn('Field not found', {
+        component: 'FormComponent',
+        action: 'handleFieldChange',
+        metadata: { fieldName }
+      });
+      return;
+    }
+    if (field.type === 'checkbox' && !field.multiple) {
+      if (!formData[fieldName]) {
+        formData[fieldName] = true;
+      } else {
+        formData[fieldName] = !formData[fieldName];
+      }
+    } else if (field.type === 'checkbox' && field.multiple && field.options) {
       if (!formData[fieldName]) {
         formData[fieldName] = [];
       }
@@ -94,6 +111,7 @@
         action: 'submit',
         metadata: { errors: validationResult.errors }
       });
+      isSubmitting = false;
       return;
     }
     await handleAction('form', formProps.submitAction, formData);
@@ -117,8 +135,8 @@
 
   <form onsubmit={handleSubmit}>
     {#each formProps.fields as field}
-      <div class="flex pb-1.5">
-        <label class="flex h-full w-1/6 items-center" for={field.name}>
+      <div class="flex pt-1.5 pb-1.5">
+        <label class="flex h-full w-1/6 items-center" for={instanceId + field.name}>
           <span class="label-text">
             {field.label}
           </span>
@@ -137,7 +155,7 @@
         <div class="w-5/6">
           {#if field.type === 'text' || field.type === 'password' || field.type === 'url'}
             <input
-              name={field.name}
+              id={instanceId + field.name}
               type={field.type}
               placeholder={field.placeholder}
               value={formData[field.name] || ''}
@@ -147,7 +165,7 @@
               disabled={isSubmitting} />
           {:else if field.type === 'email' || field.type === 'date' || field.type === 'time' || field.type === 'datetime-local'}
             <input
-              name={field.name}
+              id={instanceId + field.name}
               type={field.type}
               placeholder={field.placeholder}
               value={formData[field.name] || ''}
@@ -157,7 +175,7 @@
               disabled={isSubmitting} />
           {:else if field.type === 'color'}
             <input
-              name={field.name}
+              id={instanceId + field.name}
               type="color"
               placeholder={field.placeholder}
               value={formData[field.name] || ''}
@@ -168,7 +186,7 @@
           {:else if field.type === 'number'}
             <div class="input max-w-sm input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}" data-input-number>
               <input
-                name={field.name}
+                id={instanceId + field.name}
                 type="text"
                 value={formData[field.name] || ''}
                 placeholder={field.placeholder}
@@ -187,17 +205,17 @@
             </div>
           {:else if field.type === 'textarea'}
             <textarea
-              name={field.name}
+              id={instanceId + field.name}
               placeholder={field.placeholder}
               value={formData[field.name] || ''}
               oninput={(e) => handleFieldChange(field.name, (e.target as HTMLTextAreaElement)?.value || '')}
               onblur={() => handleFieldBlur(field)}
-              class="textarea input-{getSizeClassSuffix(formProps.size)}  {getFieldErrorClass(field.name)}"
+              class="textarea input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
               rows="3"
               disabled={isSubmitting}></textarea>
           {:else if field.type === 'select' && field.options}
             <select
-              name={field.name}
+              id={instanceId + field.name}
               value={formData[field.name] || ''}
               onchange={(e) => handleFieldChange(field.name, (e.target as HTMLSelectElement)?.value || '')}
               onblur={() => handleFieldBlur(field)}
@@ -208,71 +226,59 @@
                 <option value={option.value}>{option.label}</option>
               {/each}
             </select>
-          {:else if field.type === 'checkbox'}
-            <div class="flex space-y-2">
-              {#each field.options as option}
-                <label class="label label-text">{option.label}</label>
-                  <input
-                    name={option.value}
-                    type="checkbox"
-                    value={option.value}
-                    checked={formData[field.name]?.includes(option.value)}
-                    onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
-                    class="checkbox checkbox-primary"
-                    disabled={isSubmitting} />
-              {/each}
-            </div>
-
-            <!-- <label class="label w-1/5 cursor-pointer justify-start gap-3">
-              <input
-                id={field.name}
-                type="checkbox"
-                checked={formData[field.name] || false}
-                onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.checked || false)}
-                class="checkbox checkbox-primary"
-                disabled={isSubmitting} />
-              <span class="label-text">{field.placeholder || field.label}</span>
-            </label> -->
-
-            <!-- 单选框组 / Radio Group -->
-          {:else if field.type === 'radio' && field.options}
-            <div class="space-y-2">
-              {#each field.options as option}
-                <label class="label w-1/5 cursor-pointer justify-start gap-3">
-                  <input
-                    type="radio"
-                    name={field.name}
-                    value={option.value}
-                    checked={formData[field.name] === option.value}
-                    onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
-                    class="radio radio-primary"
-                    disabled={isSubmitting} />
-                  <span class="label-text">{option.label}</span>
-                </label>
-              {/each}
-            </div>
-
-            <!-- 日期输入 / Date Input -->
-          {:else if field.type === 'date'}
+          {:else if field.type === 'checkbox' && !field.options}
             <input
-              id={field.name}
-              type="date"
-              value={formData[field.name] || ''}
+              id={instanceId + field.name}
+              type="checkbox"
+              checked={formData[field.name]}
               onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
-              onblur={() => handleFieldBlur(field)}
-              class="input input-bordered {getFieldErrorClass(field.name)}"
+              class="checkbox checkbox-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
               disabled={isSubmitting} />
-
-            <!-- 文件上传 / File Input -->
-          {:else if field.type === 'file'}
+          {:else if field.type === 'checkbox' && field.options}
+            <div class="flex items-center">
+              {#each field.options as option}
+                <input
+                  id={instanceId + option.value}
+                  type="checkbox"
+                  value={option.value}
+                  checked={formData[field.name]?.includes(option.value)}
+                  onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
+                  class="checkbox checkbox-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
+                  disabled={isSubmitting} />
+                <label class="label label-text mr-0.5" for={instanceId + option.value}>{option.label}</label>
+              {/each}
+            </div>
+          {:else if field.type === 'radio' && field.options}
+            <div class="flex items-center">
+              {#each field.options as option}
+                <input
+                  id={instanceId + option.value}
+                  type="radio"
+                  name={field.name}
+                  value={option.value}
+                  checked={formData[field.name] === option.value}
+                  onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
+                  class="radio radio-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
+                  disabled={isSubmitting} />
+                <label class="label label-text mr-0.5" for={instanceId + option.value}>{option.label}</label>
+              {/each}
+            </div>
+          {:else if field.type === 'file' && !field.multiple}
             <input
-              id={field.name}
+              id={instanceId + field.name}
               type="file"
               onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.files?.[0] || null)}
-              class="file-input file-input-bordered {getFieldErrorClass(field.name)}"
+              class="input input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
+              disabled={isSubmitting} />
+          {:else if field.type === 'file'}
+            <input
+              id={instanceId + field.name}
+              type="file"
+              onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.files?.[0] || null)}
+              class="input input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
+              multiple
               disabled={isSubmitting} />
           {/if}
-
           <!-- 字段错误提示 / Field Error Message -->
           {#if errors[field.name]}
             <div class="label">
@@ -283,8 +289,7 @@
       </div>
     {/each}
 
-    <!-- 表单操作按钮 / Form Action Buttons -->
-    <div class="card-actions mt-6 justify-end">
+    <div class="card-actions mt-3 justify-end">
       <button type="submit" class="btn btn-primary" disabled={isSubmitting}>
         {#if isSubmitting}
           <span class="loading loading-spinner loading-sm"></span>

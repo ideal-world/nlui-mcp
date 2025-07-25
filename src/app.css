@@ -1,23 +1,12 @@
-/* 导入 TailwindCSS 基础样式 / Import TailwindCSS base styles */
 @import 'tailwindcss';
 
-/* 配置 FlyonUI 插件和主题 / Configure FlyonUI plugin and themes */
 @plugin "flyonui" {
 	themes: all;
 }
 
-/* 导入 Iconify 图标支持 / Import Iconify icon support */
 @plugin "@iconify/tailwind4";
 
-/* 导入 FlyonUI 变体样式 / Import FlyonUI variant styles */
 @import 'flyonui/variants.css';
 
-/* 导入 FlyonUI 核心组件 / Import FlyonUI core components */
 @source "../node_modules/flyonui/flyonui.js";
 
-/* 
- * 导入第三方插件样式覆盖 
- * Import third-party plugin style overrides
- * 只导入项目中实际使用的插件样式
- */
-@import 'flyonui/src/vendor/fullcalendar.css';
