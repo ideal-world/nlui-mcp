@@ -46,8 +46,18 @@
    * Handle field value change
    */
   function handleFieldChange(fieldName: string, value: any): void {
-    formData[fieldName] = value;
-
+    if (formProps.fields.find((field) => field.name === fieldName)?.type === 'checkbox') {
+      if (!formData[fieldName]) {
+        formData[fieldName] = [];
+      }
+      if (formData[fieldName].includes(value)) {
+        formData[fieldName] = formData[fieldName].filter((v: any) => v !== value);
+      } else {
+        formData[fieldName].push(value);
+      }
+    } else {
+      formData[fieldName] = value;
+    }
     // 清除该字段的错误
     if (errors[fieldName]) {
       const { [fieldName]: removed, ...rest } = errors;
@@ -125,9 +135,9 @@
           {/if}
         </label>
         <div class="w-5/6">
-          {#if field.type === 'text' ||  field.type === 'password' || field.type === 'url' }
+          {#if field.type === 'text' || field.type === 'password' || field.type === 'url'}
             <input
-              id={field.name}
+              name={field.name}
               type={field.type}
               placeholder={field.placeholder}
               value={formData[field.name] || ''}
@@ -135,9 +145,9 @@
               onblur={() => handleFieldBlur(field)}
               class="input input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
               disabled={isSubmitting} />
-              {:else if  field.type === 'email' || field.type === 'date'|| field.type === 'time'|| field.type === 'datetime-local'}
+          {:else if field.type === 'email' || field.type === 'date' || field.type === 'time' || field.type === 'datetime-local'}
             <input
-              id={field.name}
+              name={field.name}
               type={field.type}
               placeholder={field.placeholder}
               value={formData[field.name] || ''}
@@ -147,8 +157,8 @@
               disabled={isSubmitting} />
           {:else if field.type === 'color'}
             <input
-              id={field.name}
-              type='color'
+              name={field.name}
+              type="color"
               placeholder={field.placeholder}
               value={formData[field.name] || ''}
               oninput={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
@@ -156,8 +166,9 @@
               class=" border-0 input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
               disabled={isSubmitting} />
           {:else if field.type === 'number'}
-            <div id={field.name} class="input max-w-sm input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}" data-input-number>
+            <div class="input max-w-sm input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}" data-input-number>
               <input
+                name={field.name}
                 type="text"
                 value={formData[field.name] || ''}
                 placeholder={field.placeholder}
@@ -176,7 +187,7 @@
             </div>
           {:else if field.type === 'textarea'}
             <textarea
-              id={field.name}
+              name={field.name}
               placeholder={field.placeholder}
               value={formData[field.name] || ''}
               oninput={(e) => handleFieldChange(field.name, (e.target as HTMLTextAreaElement)?.value || '')}
@@ -186,7 +197,7 @@
               disabled={isSubmitting}></textarea>
           {:else if field.type === 'select' && field.options}
             <select
-              id={field.name}
+              name={field.name}
               value={formData[field.name] || ''}
               onchange={(e) => handleFieldChange(field.name, (e.target as HTMLSelectElement)?.value || '')}
               onblur={() => handleFieldBlur(field)}
@@ -198,7 +209,21 @@
               {/each}
             </select>
           {:else if field.type === 'checkbox'}
-            <label class="label w-1/5 cursor-pointer justify-start gap-3">
+            <div class="flex space-y-2">
+              {#each field.options as option}
+                <label class="label label-text">{option.label}</label>
+                  <input
+                    name={option.value}
+                    type="checkbox"
+                    value={option.value}
+                    checked={formData[field.name]?.includes(option.value)}
+                    onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
+                    class="checkbox checkbox-primary"
+                    disabled={isSubmitting} />
+              {/each}
+            </div>
+
+            <!-- <label class="label w-1/5 cursor-pointer justify-start gap-3">
               <input
                 id={field.name}
                 type="checkbox"
@@ -207,7 +232,7 @@
                 class="checkbox checkbox-primary"
                 disabled={isSubmitting} />
               <span class="label-text">{field.placeholder || field.label}</span>
-            </label>
+            </label> -->
 
             <!-- 单选框组 / Radio Group -->
           {:else if field.type === 'radio' && field.options}
