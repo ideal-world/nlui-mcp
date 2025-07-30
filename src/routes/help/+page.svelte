@@ -8,6 +8,8 @@
   import type { NLUIFormComponentProps } from '$lib/ui/components/form.types.js';
   import Table from '$lib/ui/components/table.svelte';
   import type { NLUITableComponentProps } from '$lib/ui/components/table.types.js';
+  import Markdown from '$lib/ui/components/markdown.svelte';
+  import type { NLUIMarkdownComponentProps } from '$lib/ui/components/markdown.types.js';
   import type { NLUIProps } from '$lib/ui/nluiProps.types';
   import * as m from '../../paraglide/messages';
 
@@ -47,6 +49,51 @@
         linkUrl: '#',
         target: '_self'
       }
+    }
+  ];
+
+  // Markdown示例数据 / Markdown example data
+  const markdownExamples: NLUIMarkdownComponentProps[] = [
+    {
+      title: 'Markdown Example',
+      content: `
+# Welcome to NLUI Markdown
+
+This is an example of how Markdown content is rendered in NLUI.
+
+## Features
+
+- **Bold text** and *italic text*
+- Code snippets: \`console.log('Hello NLUI!')\`
+- Lists like this one
+- [Links](https://example.com)
+
+### Code Block Example
+
+\`\`\`javascript
+function greet(name) {
+  return \`Hello, \${name}!\`;
+}
+
+console.log(greet('NLUI User'));
+\`\`\`
+
+> This is a blockquote demonstrating how quotes look in the Markdown component.
+`
+    },
+    {
+      title: 'Simple Markdown',
+      content: `
+## Simple Content
+
+This is a simpler Markdown example showing basic formatting.
+
+1. First item
+2. Second item
+3. Third item
+
+**Bold text** and *italic text* can be used for emphasis.
+`
     }
   ];
 
@@ -469,6 +516,30 @@
       window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
     }, 100);
   }
+
+  function tryMarkdownExample() {
+    // 创建包含markdown组件的示例配置
+    const markdownExampleProp = {
+      showTools: true,
+      showDebug: true,
+      block: {
+        main: {
+          kind: 'markdown' as const,
+          markdownProps: markdownExamples[0]
+        }
+      }
+    };
+
+    const sessionId = 'markdown-demo';
+
+    // 先保存到 sessionStorage
+    saveNLUIPropsToSession(markdownExampleProp, sessionId);
+
+    // 确保保存完成后再刷新，添加URL参数以确保重新检测
+    setTimeout(() => {
+      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
+    }, 100);
+  }
 </script>
 
 <svelte:head>
@@ -622,6 +693,27 @@
 
         <div class="flex gap-4">
           <button class="btn btn-primary" onclick={tryFormExample}>
+            {m.help_try_example()}
+          </button>
+        </div>
+      </div>
+
+      <!-- Markdown组件示例 / Markdown Component Examples -->
+      <div class="bg-base-100 rounded-lg p-6 shadow-lg">
+        <h2 class="text-base-content mb-4 text-2xl font-bold">Markdown Components</h2>
+        <p class="text-base-content/70 mb-6">Markdown components allow you to render rich text content using Markdown syntax, supporting headers, lists, code blocks, and more.</p>
+
+        <!-- Markdown示例 / Markdown Examples -->
+        <div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {#each markdownExamples as markdownData}
+            <div class="bg-base-200 rounded-lg p-4">
+              <Markdown {...markdownData} />
+            </div>
+          {/each}
+        </div>
+
+        <div class="flex gap-4">
+          <button class="btn btn-primary" onclick={tryMarkdownExample}>
             {m.help_try_example()}
           </button>
         </div>
