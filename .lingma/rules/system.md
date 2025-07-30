@@ -1,4 +1,7 @@
-# Copilot Instructions for NLUI-MCP Project
+---
+trigger: always_on
+---
+
 
 ## Project Overview
 
@@ -55,7 +58,6 @@ This is a **Natural Language User Interface (NLUI)** framework built with **Svel
 - Use proper TypeScript interfaces for props
 - Implement proper accessibility (a11y) attributes
 - Add JSDoc comments for complex logic
-- Use pnpm for package management to ensure dependency consistency
 
 ### Testing Strategy
 

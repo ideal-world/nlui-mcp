@@ -16,7 +16,7 @@ export class MCPClient {
 
 	constructor(baseUrl: string = '/mcp') {
 		this.baseUrl = baseUrl;
-		logger.debug('MCP Client initialized', {
+		logger.info('MCP Client initialized', {
 			component: 'MCPClient',
 			action: 'initialize',
 			metadata: { baseUrl }
@@ -225,7 +225,6 @@ export class MCPClient {
 	 */
 	async callTool(toolName: string, args: Record<string, any> = {}): Promise<any> {
 		const startTime = Date.now();
-
 		logger.info('MCP tool call started', {
 			component: 'MCPClient',
 			action: 'callTool',

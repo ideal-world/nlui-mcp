@@ -173,4 +173,6 @@ export const logger = new Logger();
 // 在开发环境下设置更详细的日志
 if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
 	logger.setLogLevel(LogLevel.DEBUG);
+}else{
+	logger.setLogLevel(LogLevel.INFO);
 }
