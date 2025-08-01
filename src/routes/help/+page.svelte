@@ -4,6 +4,8 @@
   import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
   import Card from '$lib/ui/components/card.svelte';
   import type { NLUICardComponentProps } from '$lib/ui/components/card.types.js';
+  import Chart from '$lib/ui/components/chart.svelte';
+  import type { NLUIChartComponentProps } from '$lib/ui/components/chart.types.js';
   import Form from '$lib/ui/components/form.svelte';
   import type { NLUIFormComponentProps } from '$lib/ui/components/form.types.js';
   import Table from '$lib/ui/components/table.svelte';
@@ -94,6 +96,101 @@ This is a simpler Markdown example showing basic formatting.
 
 **Bold text** and *italic text* can be used for emphasis.
 `
+    }
+  ];
+
+  // Chart示例数据 / Chart example data
+  const chartExamples: NLUIChartComponentProps[] = [
+    {
+      title: 'Line Chart Example',
+      config: {
+        chart: {
+          type: 'line'
+        },
+        xaxis: {
+          type: 'category',
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        }
+      },
+      series: [
+        {
+          name: 'Revenue',
+          data: [30000, 40000, 35000, 50000, 49000, 60000, 70000, 91000, 69000, 62000, 48000, 50000]
+        }
+      ]
+    },
+    {
+      title: 'Multi-Series Area Chart',
+      config: {
+        chart: {
+          type: 'area'
+        },
+        xaxis: {
+          type: 'category',
+          categories: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6']
+        }
+      },
+      series: [
+        {
+          name: 'Desktop',
+          data: [2800, 3200, 2900, 3400, 3100, 3600]
+        },
+        {
+          name: 'Mobile',
+          data: [1800, 2100, 2400, 2200, 2800, 2600]
+        },
+        {
+          name: 'Tablet',
+          data: [800, 900, 750, 1100, 950, 1200]
+        }
+      ]
+    },
+    {
+      title: 'Column Chart with Data Labels',
+      config: {
+        chart: {
+          type: 'bar'
+        },
+        xaxis: {
+          categories: ['Product A', 'Product B', 'Product C', 'Product D', 'Product E', 'Product F']
+        }
+      },
+      series: [
+        {
+          name: 'Sales',
+          data: [440, 505, 414, 671, 227, 413]
+        }
+      ]
+    },
+    {
+      title: 'Pie Chart Distribution',
+      config: {
+        chart: {
+          type: 'pie'
+        },
+        labels: ['Desktop', 'Mobile', 'Tablet', 'Others', 'Unknown']
+      },
+      series: [65.2, 18.4, 9.1, 4.2, 3.1]
+    },
+    {
+      title: 'Donut Chart with Total',
+      config: {
+        chart: {
+          type: 'donut'
+        },
+        labels: ['Team A', 'Team B', 'Team C', 'Team D']
+      },
+      series: [58, 23, 12, 7]
+    },
+    {
+      title: 'Radial Bar Chart',
+      config: {
+        chart: {
+          type: 'radialBar'
+        },
+        labels: ['Progress']
+      },
+      series: [75]
     }
   ];
 
@@ -540,6 +637,30 @@ This is a simpler Markdown example showing basic formatting.
       window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
     }, 100);
   }
+
+  function tryChartExample() {
+    // 创建包含chart组件的示例配置
+    const chartExampleProp = {
+      showTools: true,
+      showDebug: true,
+      block: {
+        main: {
+          kind: 'chart' as const,
+          chartProps: chartExamples[0]
+        }
+      }
+    };
+
+    const sessionId = 'chart-demo';
+
+    // 先保存到 sessionStorage
+    saveNLUIPropsToSession(chartExampleProp, sessionId);
+
+    // 确保保存完成后再刷新，添加URL参数以确保重新检测
+    setTimeout(() => {
+      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
+    }, 100);
+  }
 </script>
 
 <svelte:head>
@@ -714,6 +835,34 @@ This is a simpler Markdown example showing basic formatting.
 
         <div class="flex gap-4">
           <button class="btn btn-primary" onclick={tryMarkdownExample}>
+            {m.help_try_example()}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart组件 / Chart Component -->
+    <div class="card bg-base-100 mb-8 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title mb-4 text-2xl">
+          <span class="icon-[tabler--chart-line] text-primary h-8 w-8"></span>
+          {m.doc_component_chart_title()}
+        </h2>
+        <p class="text-base-content/70 mb-6">
+          {m.doc_component_chart_description()}
+        </p>
+
+        <!-- Chart示例 / Chart Examples -->
+        <div class="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
+          {#each chartExamples as chartData}
+            <div class="bg-base-200 rounded-lg p-4">
+              <Chart {...chartData} />
+            </div>
+          {/each}
+        </div>
+
+        <div class="flex gap-4">
+          <button class="btn btn-primary" onclick={tryChartExample}>
             {m.help_try_example()}
           </button>
         </div>

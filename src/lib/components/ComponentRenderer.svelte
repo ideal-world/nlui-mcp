@@ -2,6 +2,7 @@
 	import * as m from '../../paraglide/messages';
 	import Audio from '../ui/components/audio.svelte';
 	import Card from '../ui/components/card.svelte';
+	import Chart from '../ui/components/chart.svelte';
 	import Form from '../ui/components/form.svelte';
 	import Image from '../ui/components/image.svelte';
 	import Markdown from '../ui/components/markdown.svelte';
@@ -51,6 +52,10 @@
 				if (!component.markdownProps) {
 					throw new Error('Markdown component missing markdownProps');
 				}
+			} else if (component.kind === 'chart') {
+				if (!component.chartProps) {
+					throw new Error('Chart component missing chartProps');
+				}
 			} else {
 				throw new Error(`Unknown component kind: ${component.kind}`);
 			}
@@ -90,6 +95,8 @@
 	<Audio {...component.audioProps} />
 {:else if component.kind === 'markdown' && component.markdownProps}
 	<Markdown {...component.markdownProps} />
+{:else if component.kind === 'chart' && component.chartProps}
+	<Chart {...component.chartProps} />
 {:else}
 	<Card
 		title="组件开发中 / Component In Development"

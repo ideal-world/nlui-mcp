@@ -56,6 +56,7 @@ This is a **Natural Language User Interface (NLUI)** framework built with **Svel
 - Implement proper accessibility (a11y) attributes
 - Add JSDoc comments for complex logic
 - Use pnpm for package management to ensure dependency consistency
+- Please use pnpm instead of npm
 
 ### Testing Strategy
 

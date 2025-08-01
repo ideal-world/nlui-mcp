@@ -1,12 +1,14 @@
-import type { IStaticMethods } from "flyonui/flyonui";
+import type { IStaticMethods } from 'flyonui/flyonui';
 
 declare global {
-	interface Window {
-		// FlyonUI
-		HSStaticMethods: IStaticMethods;
-	}
-	namespace App {
-	}
+  interface Window {
+    // Optional plugins
+    _;
+
+    // FlyonUI
+    HSStaticMethods: IStaticMethods;
+  }
+  namespace App {}
 }
 
-export { };
+export {};
