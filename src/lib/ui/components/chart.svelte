@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { NLUIChartComponentProps, ApexChartConfig } from './chart.types';
-  import { getBaseClasses, getSizeClassSuffix } from '../common/base.utils';
   import * as m from '../../../paraglide/messages';
   import { mergeDeep } from '$lib/utils';
   import { browser } from '$app/environment';
 
   let chartProps: NLUIChartComponentProps = $props();
+
   let chartContainer = $state<HTMLDivElement | undefined>();
   let chartInstance: any = null;
   let ApexCharts: any = null;
@@ -29,13 +29,6 @@
     return () => {
       cleanup();
     };
-  });
-
-  // 响应式计算样式类
-  let containerClasses = $derived(() => {
-    const baseClasses = getBaseClasses('chart', chartProps.size);
-    const sizeClass = getSizeClassSuffix(chartProps.size);
-    return `chart-container w-full ${baseClasses} ${sizeClass}`.trim();
   });
 
   // 合并默认配置和用户配置
@@ -121,7 +114,7 @@
   {/if}
 
   <div class="card-body {chartProps.title ? 'pt-4' : ''}">
-    <div class={containerClasses}>
+    <div class='w-full'>
       {#if isLoading}
         <div class="text-base-content/60 flex h-[350px] flex-col items-center justify-center">
           <div class="loading loading-spinner loading-lg text-primary"></div>
