@@ -159,7 +159,7 @@ function generateSystemPromptZH(): string {
 ## 💡 执行指南
 
 **当使用ui-render工具时**：
-1. 根据用户需求选择最合适的组件类型（table、card、form、list、alert）
+1. 根据用户需求选择最合适的组件类型（table、card、form、chart、calendar、markdown、image、video、audio等）
 2. 提供真实、详细的数据内容，避免占位符
 3. 确保配置完整且符合NLUI规范
 4. 配置合理的组件属性和样式
@@ -286,6 +286,46 @@ ${formatSchemaAsDocumentation('NLUIProps', nluiSchemas.NLUIProps)}
       }
     },
     "showTools": true,
+    "showDebug": false
+  }
+}
+
+{
+  "nluiProps": {
+    "block": {
+      "main": {
+        "kind": "calendar",
+        "calendarProps": {
+          "title": "项目日程安排",
+          "config": {
+            "initialView": "dayGridMonth",
+            "headerToolbar": {
+              "left": "prev,next today",
+              "center": "title",
+              "right": "dayGridMonth,timeGridWeek"
+            },
+            "height": 600
+          },
+          "events": [
+            {
+              "id": "1",
+              "title": "项目启动会议",
+              "start": "2025-08-15T10:00:00",
+              "end": "2025-08-15T11:30:00",
+              "classNames": ["fc-event-primary"]
+            },
+            {
+              "id": "2",
+              "title": "项目截止日期",
+              "start": "2025-08-30",
+              "allDay": true,
+              "classNames": ["fc-event-error"]
+            }
+          ]
+        }
+      }
+    },
+    "showTools": false,
     "showDebug": false
   }
 }`,

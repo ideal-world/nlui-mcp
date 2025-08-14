@@ -12,7 +12,6 @@
   let isLoading = $state(true);
   let isInitialized = $state(false);
 
-  // 清理函数
   function cleanup() {
     if (chartInstance) {
       try {
@@ -24,14 +23,12 @@
     }
   }
 
-  // 组件卸载时清理
   $effect(() => {
     return () => {
       cleanup();
     };
   });
 
-  // 合并默认配置和用户配置
   let mergedConfig: ApexChartConfig = $derived.by(() => {
     const defaultConfig: ApexChartConfig = {
       chart: {
@@ -41,7 +38,6 @@
     return mergeDeep(defaultConfig, chartProps.config);
   });
 
-  // 使用 $effect 代替 onMount - Svelte 5 标准语法
   $effect(() => {
     if (!browser || isInitialized) return;
 
@@ -57,14 +53,12 @@
     })();
   });
 
-  // 图表渲染逻辑
   $effect(() => {
     if (chartContainer && ApexCharts && !isLoading && hasData && !chartInstance) {
       renderChart();
     }
   });
 
-  // 渲染图表
   async function renderChart() {
     if (!ApexCharts || !chartContainer || !chartProps.config || !chartProps.series?.length || chartInstance) {
       return;
@@ -87,7 +81,6 @@
     }
   }
 
-  // 检查是否有数据
   let hasData = $derived(
     chartProps.series &&
       chartProps.series.length > 0 &&
@@ -99,7 +92,6 @@
       })
   );
 
-  // 加载状态和无数据提示
   let showNoData = $derived(!hasData);
   let noDataMessage = $derived(chartProps.noDataPrompt || m.chart_no_data?.() || 'No data available');
 </script>

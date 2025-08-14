@@ -1,5 +1,6 @@
 import type { BaseComponentProps } from './common/base.types';
 import type { NLUIAudioComponentProps } from './components/audio.types';
+import type { NLUICalendarComponentProps } from './components/calendar.types';
 import type { NLUICardComponentProps } from './components/card.types';
 import type { NLUIChartComponentProps } from './components/chart.types';
 import type { NLUIFormComponentProps } from './components/form.types';
@@ -54,4 +55,6 @@ export interface NLUIComponent extends BaseComponentProps {
   markdownProps?: NLUIMarkdownComponentProps;
   /** @conditional kind === "chart" */
   chartProps?: NLUIChartComponentProps;
+  /** @conditional kind === "calendar" */
+  calendarProps?: NLUICalendarComponentProps;
 }

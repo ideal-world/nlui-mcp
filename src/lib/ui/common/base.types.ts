@@ -5,13 +5,13 @@ export interface BaseComponentProps {
 }
 
 export interface BaseActionProps {
-	label: string;
+	label?: string;
 }
 
 export interface LinkActionProps extends BaseActionProps {
 	/** Supports using {} as placeholders */
 	linkUrl: string;
-	target: '_self' | '_blank';
+	target?: '_self' | '_blank';
 	type?: 'create' | 'edit' | 'view' | 'delete' | 'download';
 }
 

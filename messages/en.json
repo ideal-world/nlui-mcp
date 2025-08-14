@@ -130,6 +130,15 @@
   "table_page": "Page {page}",
   "chart_no_data": "No data available",
   "chart_loading": "Loading chart...",
+  "calendar_loading": "Loading calendar...",
+  "calendar_no_events": "No events to display",
+  "calendar_today": "Today",
+  "calendar_month": "Month",
+  "calendar_week": "Week",
+  "calendar_day": "Day",
+  "calendar_list": "List",
   "doc_component_chart_title": "Chart Components",
-  "doc_component_chart_description": "Chart components provide powerful data visualization capabilities using ApexCharts library, supporting various chart types like line, area, bar, pie, donut, and more."
+  "doc_component_chart_description": "Chart components provide powerful data visualization capabilities using ApexCharts library, supporting various chart types like line, area, bar, pie, donut, and more.",
+  "doc_component_calendar_title": "Calendar Components",
+  "doc_component_calendar_description": "Calendar components provide interactive event scheduling and date management using FullCalendar library, supporting monthly, weekly, and daily views."
 }

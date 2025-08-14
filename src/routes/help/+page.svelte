@@ -2,16 +2,18 @@
   import { saveNLUIPropsToSession } from '$lib/client/nluiPropProcessor';
   import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
   import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
+  import Calendar from '$lib/ui/components/calendar.svelte';
+  import type { NLUICalendarComponentProps } from '$lib/ui/components/calendar.types.js';
   import Card from '$lib/ui/components/card.svelte';
   import type { NLUICardComponentProps } from '$lib/ui/components/card.types.js';
   import Chart from '$lib/ui/components/chart.svelte';
   import type { NLUIChartComponentProps } from '$lib/ui/components/chart.types.js';
   import Form from '$lib/ui/components/form.svelte';
   import type { NLUIFormComponentProps } from '$lib/ui/components/form.types.js';
-  import Table from '$lib/ui/components/table.svelte';
-  import type { NLUITableComponentProps } from '$lib/ui/components/table.types.js';
   import Markdown from '$lib/ui/components/markdown.svelte';
   import type { NLUIMarkdownComponentProps } from '$lib/ui/components/markdown.types.js';
+  import Table from '$lib/ui/components/table.svelte';
+  import type { NLUITableComponentProps } from '$lib/ui/components/table.types.js';
   import type { NLUIProps } from '$lib/ui/nluiProps.types';
   import * as m from '../../paraglide/messages';
 
@@ -191,6 +193,124 @@ This is a simpler Markdown example showing basic formatting.
         labels: ['Progress']
       },
       series: [75]
+    }
+  ];
+
+  // Calendar示例数据 / Calendar example data
+  const calendarExamples: NLUICalendarComponentProps[] = [
+    {
+      title: 'Basic Calendar',
+      config: {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        }
+      },
+      events: [
+        {
+          title: 'Team Meeting',
+          start: '2025-08-15T10:00:00',
+          end: '2025-08-15T11:30:00',
+          kind: 'success'
+        },
+        {
+          title: 'Project Deadline',
+          start: '2025-08-20',
+          allDay: true,
+          kind: 'error'
+        },
+        {
+          title: 'Code Review',
+          start: '2025-08-16T14:00:00',
+          end: '2025-08-16T15:00:00',
+          kind: 'info'
+        },
+        {
+          title: 'Lunch Break',
+          start: '2025-08-17T12:00:00',
+          end: '2025-08-17T13:00:00',
+          kind: 'success'
+        }
+      ],
+      action:{
+        linkUrl: '/calendar?title={title}',
+      }
+    },
+    {
+      title: 'Weekly Schedule',
+      config: {
+        initialView: 'timeGridWeek',
+        headerToolbar: {
+          left: 'prev,next',
+          center: 'title',
+          right: 'timeGridWeek,timeGridDay'
+        }
+      },
+      events: [
+        {
+          title: 'Daily Standup',
+          start: '2025-08-12T09:00:00',
+          end: '2025-08-12T09:30:00',
+          kind: 'success'
+        },
+        {
+          title: 'Development Work',
+          start: '2025-08-12T10:00:00',
+          end: '2025-08-12T12:00:00',
+          kind: 'info'
+        },
+        {
+          title: 'Client Presentation',
+          start: '2025-08-13T15:00:00',
+          end: '2025-08-13T16:30:00',
+          kind: 'warning'
+        },
+        {
+          title: 'Team Retrospective',
+          start: '2025-08-14T16:00:00',
+          end: '2025-08-14T17:00:00'
+        }
+      ]
+    },
+    {
+      title: 'Event Categories',
+      config: {
+        initialView: 'dayGridMonth'
+      },
+      events: [
+        {
+          title: 'Important Meeting',
+          start: '2025-08-15',
+          kind: 'success'
+        },
+        {
+          title: 'Deadline Alert',
+          start: '2025-08-18',
+          kind: 'error'
+        },
+        {
+          title: 'New Feature Launch',
+          start: '2025-08-22',
+          kind: 'success'
+        },
+        {
+          title: 'Training Session',
+          start: '2025-08-25',
+          kind: 'info'
+        },
+        {
+          title: 'Team Building',
+          start: '2025-08-28',
+          kind: 'warning'
+        },
+        {
+          title: 'Conference',
+          start: '2025-08-30',
+          end: '2025-09-01'
+        }
+      ]
     }
   ];
 
@@ -661,6 +781,30 @@ This is a simpler Markdown example showing basic formatting.
       window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
     }, 100);
   }
+
+  function tryCalendarExample() {
+    // 创建包含calendar组件的示例配置
+    const calendarExampleProp = {
+      showTools: true,
+      showDebug: true,
+      block: {
+        main: {
+          kind: 'calendar' as const,
+          calendarProps: calendarExamples[0]
+        }
+      }
+    };
+
+    const sessionId = 'calendar-demo';
+
+    // 先保存到 sessionStorage
+    saveNLUIPropsToSession(calendarExampleProp, sessionId);
+
+    // 确保保存完成后再刷新，添加URL参数以确保重新检测
+    setTimeout(() => {
+      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
+    }, 100);
+  }
 </script>
 
 <svelte:head>
@@ -863,6 +1007,34 @@ This is a simpler Markdown example showing basic formatting.
 
         <div class="flex gap-4">
           <button class="btn btn-primary" onclick={tryChartExample}>
+            {m.help_try_example()}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendar组件 / Calendar Component -->
+    <div class="card bg-base-100 mb-8 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title mb-4 text-2xl">
+          <span class="icon-[tabler--calendar] text-primary h-8 w-8"></span>
+          {m.doc_component_calendar_title()}
+        </h2>
+        <p class="text-base-content/70 mb-6">
+          {m.doc_component_calendar_description()}
+        </p>
+
+        <!-- Calendar示例 / Calendar Examples -->
+        <div class="mb-8 grid grid-cols-1 gap-6">
+          {#each calendarExamples as calendarData}
+            <div class="bg-base-200 rounded-lg p-4">
+              <Calendar {...calendarData} />
+            </div>
+          {/each}
+        </div>
+
+        <div class="flex gap-4">
+          <button class="btn btn-primary" onclick={tryCalendarExample}>
             {m.help_try_example()}
           </button>
         </div>
