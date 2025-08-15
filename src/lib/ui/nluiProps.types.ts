@@ -36,7 +36,7 @@ export interface NLUIBlock {
   right?: NLUIComponent | NLUIBlock;
 }
 
-export type NLUIComponentKind = 'image' | 'video' | 'audio' | 'markdown' | 'table' | 'form' | 'card' | 'chart' | 'calendar' | 'timeline' | 'gallery' | 'mindmap';
+export type NLUIComponentKind = 'image' | 'video' | 'audio' | 'markdown' | 'table' | 'form' | 'card' | 'chart' | 'calendar' | 'timeline' | 'gallery';
 
 export interface NLUIComponent extends BaseComponentProps {
   /** Component type determines which UI element to render */

@@ -127,7 +127,8 @@
       {#each locales as locale}
         <button
           class="text-base-content hover:bg-base-200 flex w-full items-center gap-2 px-3 py-1.5 text-xs {getCurrentLocale() === locale ? 'bg-primary/10 text-primary' : ''}"
-          onclick={() => handleLanguageChange(locale)}>
+          onclick={() => handleLanguageChange(locale)}
+        >
           <span class="text-sm">{languageFlags[locale]}</span>
           <span>{languageNames[locale]}</span>
           {#if getCurrentLocale() === locale}

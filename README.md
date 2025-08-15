@@ -91,17 +91,17 @@ http://localhost:5173?sessionId=demo&nlui=%7B%22block%22%3A%7B%22main%22%3A%7B%2
 ```javascript
 // 保存配置到 sessionStorage
 const config = {
-	block: {
-		main: {
-			kind: 'card',
-			cardProps: {
-				title: '欢迎使用 NLUI',
-				body: '这是一个基于自然语言的用户界面框架'
-			}
-		}
-	},
-	showTools: true,
-	showDebug: false
+  block: {
+    main: {
+      kind: 'card',
+      cardProps: {
+        title: '欢迎使用 NLUI',
+        body: '这是一个基于自然语言的用户界面框架'
+      }
+    }
+  },
+  showTools: true,
+  showDebug: false
 };
 
 sessionStorage.setItem('nluiProp_demo', JSON.stringify(config));
@@ -125,11 +125,11 @@ NLUI 采用 5 区域布局模式：
 
 ```typescript
 interface NLUIBlock {
-	main: NLUIComponent | NLUIBlock; // 主内容区（必需）
-	header?: NLUIComponent | NLUIBlock; // 头部区域
-	footer?: NLUIComponent | NLUIBlock; // 底部区域
-	left?: NLUIComponent | NLUIBlock; // 左侧边栏
-	right?: NLUIComponent | NLUIBlock; // 右侧边栏
+  main: NLUIComponent | NLUIBlock; // 主内容区（必需）
+  header?: NLUIComponent | NLUIBlock; // 头部区域
+  footer?: NLUIComponent | NLUIBlock; // 底部区域
+  left?: NLUIComponent | NLUIBlock; // 左侧边栏
+  right?: NLUIComponent | NLUIBlock; // 右侧边栏
 }
 ```
 
@@ -139,30 +139,30 @@ interface NLUIBlock {
 
 ```typescript
 const employeeTable = {
-	block: {
-		main: {
-			kind: 'table',
-			tableProps: {
-				caption: '员工信息管理',
-				columns: [
-					{ key: 'name', label: '姓名', type: 'text' },
-					{ key: 'email', label: '邮箱', type: 'text' },
-					{ key: 'position', label: '职位', type: 'text' },
-					{ key: 'department', label: '部门', type: 'text' }
-				],
-				data: [
-					{
-						name: '张三',
-						email: 'zhang@example.com',
-						position: '前端工程师',
-						department: '技术部'
-					},
-					{ name: '李四', email: 'li@example.com', position: '后端工程师', department: '技术部' }
-				]
-			}
-		}
-	},
-	showTools: true
+  block: {
+    main: {
+      kind: 'table',
+      tableProps: {
+        caption: '员工信息管理',
+        columns: [
+          { key: 'name', label: '姓名', type: 'text' },
+          { key: 'email', label: '邮箱', type: 'text' },
+          { key: 'position', label: '职位', type: 'text' },
+          { key: 'department', label: '部门', type: 'text' }
+        ],
+        data: [
+          {
+            name: '张三',
+            email: 'zhang@example.com',
+            position: '前端工程师',
+            department: '技术部'
+          },
+          { name: '李四', email: 'li@example.com', position: '后端工程师', department: '技术部' }
+        ]
+      }
+    }
+  },
+  showTools: true
 };
 ```
 
@@ -170,20 +170,20 @@ const employeeTable = {
 
 ```typescript
 const productCard = {
-	block: {
-		main: {
-			kind: 'card',
-			cardProps: {
-				title: 'iPhone 15 Pro',
-				body: '搭载 A17 Pro 芯片，支持 Action Button，配备 48MP 主摄像头',
-				footer: '￥7999 起',
-				primaryAction: {
-					label: '立即购买',
-					onClickLink: '/buy'
-				}
-			}
-		}
-	}
+  block: {
+    main: {
+      kind: 'card',
+      cardProps: {
+        title: 'iPhone 15 Pro',
+        body: '搭载 A17 Pro 芯片，支持 Action Button，配备 48MP 主摄像头',
+        footer: '￥7999 起',
+        primaryAction: {
+          label: '立即购买',
+          onClickLink: '/buy'
+        }
+      }
+    }
+  }
 };
 ```
 
@@ -191,36 +191,36 @@ const productCard = {
 
 ```typescript
 const dashboardLayout = {
-	block: {
-		header: {
-			kind: 'card',
-			cardProps: {
-				title: '控制台',
-				body: '欢迎回来！'
-			}
-		},
-		left: {
-			kind: 'list',
-			listProps: {
-				items: [{ content: '首页' }, { content: '数据分析' }, { content: '用户管理' }]
-			}
-		},
-		main: {
-			kind: 'table',
-			tableProps: {
-				caption: '最新数据'
-				// ... 表格配置
-			}
-		},
-		right: {
-			kind: 'alert',
-			alertProps: {
-				type: 'info',
-				message: '系统运行正常'
-			}
-		}
-	},
-	showTools: true
+  block: {
+    header: {
+      kind: 'card',
+      cardProps: {
+        title: '控制台',
+        body: '欢迎回来！'
+      }
+    },
+    left: {
+      kind: 'list',
+      listProps: {
+        items: [{ content: '首页' }, { content: '数据分析' }, { content: '用户管理' }]
+      }
+    },
+    main: {
+      kind: 'table',
+      tableProps: {
+        caption: '最新数据'
+        // ... 表格配置
+      }
+    },
+    right: {
+      kind: 'alert',
+      alertProps: {
+        type: 'info',
+        message: '系统运行正常'
+      }
+    }
+  },
+  showTools: true
 };
 ```
 
@@ -251,8 +251,8 @@ src/
 ```typescript
 // mycomponent.types.ts
 export interface NLUIMyComponentProps extends BaseComponentProps {
-	title: string;
-	content: string;
+  title: string;
+  content: string;
 }
 ```
 
@@ -261,13 +261,13 @@ export interface NLUIMyComponentProps extends BaseComponentProps {
 ```svelte
 <!-- mycomponent.svelte -->
 <script lang="ts">
-	import type { NLUIMyComponentProps } from './mycomponent.types';
-	let { title, content }: NLUIMyComponentProps = $props();
+  import type { NLUIMyComponentProps } from './mycomponent.types';
+  let { title, content }: NLUIMyComponentProps = $props();
 </script>
 
 <div class="my-component">
-	<h3>{title}</h3>
-	<p>{content}</p>
+  <h3>{title}</h3>
+  <p>{content}</p>
 </div>
 ```
 
@@ -295,7 +295,7 @@ export interface NLUIMyComponentProps extends BaseComponentProps {
 
 ```svelte
 <script>
-	import * as m from '../paraglide/messages';
+  import * as m from '../paraglide/messages';
 </script>
 
 <p>{m.my_new_key()}</p>

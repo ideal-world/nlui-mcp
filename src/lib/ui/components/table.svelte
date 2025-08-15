@@ -91,7 +91,8 @@
                       </button>
                     {:else}
                       <button class="btn btn-circle btn-text btn-{getSmallerSizeClassSuffix(tableProps.size)}" aria-label={action.label || ''} onclick={() => handleAction('table', action, { id: row.id })}
-                        >{action.label || '...'}</button>
+                        >{action.label || '...'}</button
+                      >
                     {/if}
                   {/each}
                 </td>

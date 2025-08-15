@@ -69,7 +69,7 @@
       const finalConfig = {
         ...config,
         chart: {
-          ...config.chart,
+          ...config.chart
         },
         series: chartProps.series
       };
@@ -106,7 +106,7 @@
   {/if}
 
   <div class="card-body {chartProps.title ? 'pt-4' : ''}">
-    <div class='w-full'>
+    <div class="w-full">
       {#if isLoading}
         <div class="text-base-content/60 flex h-[350px] flex-col items-center justify-center">
           <div class="loading loading-spinner loading-lg text-primary"></div>

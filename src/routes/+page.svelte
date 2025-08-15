@@ -10,7 +10,7 @@
   let renderError: string = $state('');
   let errorDetails: string = $state('');
   $effect(() => {
-	// TODO
+    // TODO
     window.HSStaticMethods.autoInit();
     if (typeof window !== 'undefined' && isLoading) {
       (async () => {

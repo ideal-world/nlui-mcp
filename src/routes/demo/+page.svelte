@@ -265,7 +265,8 @@
                       loading="lazy"
                       sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                       onload={() => handleIframeLoad(message.timestamp)}
-                      onloadstart={() => handleIframeStart(message.timestamp)}></iframe>
+                      onloadstart={() => handleIframeStart(message.timestamp)}
+                    ></iframe>
                   </div>
                 </div>
               </div>

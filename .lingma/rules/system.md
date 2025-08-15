@@ -2,7 +2,6 @@
 trigger: always_on
 ---
 
-
 ## Project Overview
 
 This is a **Natural Language User Interface (NLUI)** framework built with **SvelteKit** and **TypeScript**, designed to simplify user interaction with computer systems through natural language communication. The project integrates with the **Model Context Protocol (MCP)** to provide intelligent UI components.

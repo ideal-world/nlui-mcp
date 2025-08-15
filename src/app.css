@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @plugin "flyonui" {
-	themes: all;
+  themes: all;
 }
 
 @plugin "@iconify/tailwind4";
@@ -10,6 +10,6 @@
 
 @source "../node_modules/flyonui/flyonui.js";
 
-@import "flyonui/src/vendor/apexcharts.css";
+@import 'flyonui/src/vendor/apexcharts.css';
 
-@import "flyonui/src/vendor/fullcalendar.css";
+@import 'flyonui/src/vendor/fullcalendar.css';

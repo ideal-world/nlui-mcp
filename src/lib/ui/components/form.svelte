@@ -162,7 +162,8 @@
               oninput={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
               onblur={() => handleFieldBlur(field)}
               class="input input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
-              disabled={isSubmitting} />
+              disabled={isSubmitting}
+            />
           {:else if field.type === 'email' || field.type === 'date' || field.type === 'time' || field.type === 'datetime-local'}
             <input
               id={instanceId + field.name}
@@ -172,7 +173,8 @@
               oninput={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
               onblur={() => handleFieldBlur(field)}
               class="input input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)} max-w-sm"
-              disabled={isSubmitting} />
+              disabled={isSubmitting}
+            />
           {:else if field.type === 'color'}
             <input
               id={instanceId + field.name}
@@ -182,7 +184,8 @@
               oninput={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
               onblur={() => handleFieldBlur(field)}
               class=" border-0 input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
-              disabled={isSubmitting} />
+              disabled={isSubmitting}
+            />
           {:else if field.type === 'number'}
             <div class="input max-w-sm input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}" data-input-number>
               <input
@@ -193,7 +196,8 @@
                 disabled={isSubmitting}
                 oninput={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
                 onblur={() => handleFieldBlur(field)}
-                data-input-number-input />
+                data-input-number-input
+              />
               <span class="my-auto flex gap-3">
                 <button type="button" class="btn btn-primary btn-soft size-5.5 min-h-0 rounded-sm p-0" aria-label="Decrement" data-input-number-decrement>
                   <span class="icon-[tabler--minus] size-3.5 shrink-0"></span>
@@ -212,7 +216,8 @@
               onblur={() => handleFieldBlur(field)}
               class="textarea input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
               rows="3"
-              disabled={isSubmitting}></textarea>
+              disabled={isSubmitting}
+            ></textarea>
           {:else if field.type === 'select' && field.options}
             <select
               id={instanceId + field.name}
@@ -220,7 +225,8 @@
               onchange={(e) => handleFieldChange(field.name, (e.target as HTMLSelectElement)?.value || '')}
               onblur={() => handleFieldBlur(field)}
               class="select select-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
-              disabled={isSubmitting}>
+              disabled={isSubmitting}
+            >
               <option value="">{field.placeholder || `请选择${field.label}`}</option>
               {#each field.options as option}
                 <option value={option.value}>{option.label}</option>
@@ -233,7 +239,8 @@
               checked={formData[field.name]}
               onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
               class="checkbox checkbox-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
-              disabled={isSubmitting} />
+              disabled={isSubmitting}
+            />
           {:else if field.type === 'checkbox' && field.options}
             <div class="flex items-center">
               {#each field.options as option}
@@ -244,7 +251,8 @@
                   checked={formData[field.name]?.includes(option.value)}
                   onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
                   class="checkbox checkbox-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
-                  disabled={isSubmitting} />
+                  disabled={isSubmitting}
+                />
                 <label class="label label-text mr-0.5" for={instanceId + option.value}>{option.label}</label>
               {/each}
             </div>
@@ -259,7 +267,8 @@
                   checked={formData[field.name] === option.value}
                   onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.value || '')}
                   class="radio radio-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
-                  disabled={isSubmitting} />
+                  disabled={isSubmitting}
+                />
                 <label class="label label-text mr-0.5" for={instanceId + option.value}>{option.label}</label>
               {/each}
             </div>
@@ -269,7 +278,8 @@
               type="file"
               onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.files?.[0] || null)}
               class="input input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
-              disabled={isSubmitting} />
+              disabled={isSubmitting}
+            />
           {:else if field.type === 'file'}
             <input
               id={instanceId + field.name}
@@ -277,7 +287,8 @@
               onchange={(e) => handleFieldChange(field.name, (e.target as HTMLInputElement)?.files?.[0] || null)}
               class="input input-{getSizeClassSuffix(formProps.size)} {getFieldErrorClass(field.name)}"
               multiple
-              disabled={isSubmitting} />
+              disabled={isSubmitting}
+            />
           {/if}
           <!-- 字段错误提示 / Field Error Message -->
           {#if errors[field.name]}

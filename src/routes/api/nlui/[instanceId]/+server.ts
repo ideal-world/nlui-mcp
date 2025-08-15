@@ -8,36 +8,36 @@ import { error, json } from '@sveltejs/kit';
  * Get NLUIProps configuration by instanceId
  */
 export async function GET({ params }: { params: { instanceId: string } }) {
-	const { instanceId } = params;
+  const { instanceId } = params;
 
-	try {
-		if (!instanceId) {
-			logger.warn('Missing instanceId parameter', {
-				component: 'NLUIApi',
-				action: 'getNLUIProps',
-				metadata: { instanceId: null }
-			});
-			return error(400, 'Missing instanceId parameter');
-		}
+  try {
+    if (!instanceId) {
+      logger.warn('Missing instanceId parameter', {
+        component: 'NLUIApi',
+        action: 'getNLUIProps',
+        metadata: { instanceId: null }
+      });
+      return error(400, 'Missing instanceId parameter');
+    }
 
-		const nluiProps = getNLUIPropsById(instanceId);
+    const nluiProps = getNLUIPropsById(instanceId);
 
-		if (!nluiProps) {
-			logger.warn('NLUIProps configuration not found', {
-				component: 'NLUIApi',
-				action: 'getNLUIProps',
-				metadata: { instanceId, found: false }
-			});
-			return error(404, 'NLUIProps configuration not found');
-		}
+    if (!nluiProps) {
+      logger.warn('NLUIProps configuration not found', {
+        component: 'NLUIApi',
+        action: 'getNLUIProps',
+        metadata: { instanceId, found: false }
+      });
+      return error(404, 'NLUIProps configuration not found');
+    }
 
-		return json(nluiProps);
-	} catch (err) {
-		logger.error('Error retrieving NLUIProps configuration', err, {
-			component: 'NLUIApi',
-			action: 'getNLUIProps',
-			metadata: { instanceId }
-		});
-		return error(500, 'Internal server error');
-	}
+    return json(nluiProps);
+  } catch (err) {
+    logger.error('Error retrieving NLUIProps configuration', err, {
+      component: 'NLUIApi',
+      action: 'getNLUIProps',
+      metadata: { instanceId }
+    });
+    return error(500, 'Internal server error');
+  }
 }

@@ -1,9 +1,6 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(npm run check:*)",
-      "WebFetch(domain:flyonui.com)"
-    ],
+    "allow": ["Bash(npm run check:*)", "WebFetch(domain:flyonui.com)"],
     "deny": []
   }
 }
