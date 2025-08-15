@@ -10,6 +10,8 @@
   import type { NLUIChartComponentProps } from '$lib/ui/components/chart.types.js';
   import Form from '$lib/ui/components/form.svelte';
   import type { NLUIFormComponentProps } from '$lib/ui/components/form.types.js';
+  import Gallery from '$lib/ui/components/gallery.svelte';
+  import type { NLUIGalleryComponentProps } from '$lib/ui/components/gallery.types.js';
   import Markdown from '$lib/ui/components/markdown.svelte';
   import type { NLUIMarkdownComponentProps } from '$lib/ui/components/markdown.types.js';
   import Table from '$lib/ui/components/table.svelte';
@@ -338,6 +340,58 @@ This is a simpler Markdown example showing basic formatting.
         { id: 'A2', time: '12:30', title: 'Packed', status: 'success' },
         { id: 'A3', time: '15:00', title: 'Shipped', status: 'error' },
         { id: 'A4', time: '18:45', title: 'Delivered', status: 'warning' }
+      ]
+    }
+  ];
+
+  // Gallery示例数据 / Gallery example data
+  const galleryExamples: NLUIGalleryComponentProps[] = [
+    {
+      title: 'Product Showcase',
+      items: [
+        {
+          id: '1',
+          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-22.png',
+          caption: 'High-end gaming equipment'
+        },
+        {
+          id: '2',
+          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-15.png',
+          caption: 'Virtual Reality Experience Box'
+        },
+        {
+          id: '3',
+          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-16.png',
+          caption: 'High-performance laptop'
+        },
+        {
+          id: '4',
+          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-8.png',
+          caption: 'Professional VR headset'
+        }
+      ],
+      action: {
+        linkUrl: '/gallery?item={id}'
+      }
+    },
+    {
+      title: 'Simple Image Gallery',
+      items: [
+        {
+          id: '1',
+          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-21.png',
+          caption: 'Beautiful mountain landscape'
+        },
+        {
+          id: '2',
+          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-14.png',
+          caption: 'Stunning desert view'
+        },
+        {
+          id: '3',
+          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-7.png',
+          caption: 'Amazing cloud formations'
+        }
       ]
     }
   ];
@@ -852,6 +906,25 @@ This is a simpler Markdown example showing basic formatting.
       window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
     }, 100);
   }
+
+  function tryGalleryExample() {
+    const galleryExampleProp = {
+      showTools: true,
+      showDebug: true,
+      block: {
+        main: {
+          kind: 'gallery' as const,
+          galleryProps: galleryExamples[0]
+        }
+      }
+    };
+
+    const sessionId = 'gallery-demo';
+    saveNLUIPropsToSession(galleryExampleProp, sessionId);
+    setTimeout(() => {
+      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
+    }, 100);
+  }
 </script>
 
 <svelte:head>
@@ -1108,6 +1181,32 @@ This is a simpler Markdown example showing basic formatting.
 
         <div class="flex gap-4">
           <button class="btn btn-primary" onclick={tryTimelineExample}>
+            {m.help_try_example()}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery组件 / Gallery Component -->
+    <div class="card bg-base-100 mb-8 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title mb-4 text-2xl">
+          <span class="icon-[tabler--photo] text-primary h-8 w-8"></span>
+          {m.doc_component_gallery_title()}
+        </h2>
+        <p class="text-base-content/70 mb-6">{m.doc_component_gallery_description()}</p>
+
+        <!-- Gallery示例 / Gallery Examples -->
+        <div class="mb-8 grid grid-cols-1 gap-6">
+          {#each galleryExamples as gallery}
+            <div class="bg-base-200 rounded-lg p-4">
+              <Gallery {...gallery} />
+            </div>
+          {/each}
+        </div>
+
+        <div class="flex gap-4">
+          <button class="btn btn-primary" onclick={tryGalleryExample}>
             {m.help_try_example()}
           </button>
         </div>

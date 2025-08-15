@@ -5,6 +5,7 @@
   import Card from '../ui/components/card.svelte';
   import Chart from '../ui/components/chart.svelte';
   import Form from '../ui/components/form.svelte';
+  import Gallery from '../ui/components/gallery.svelte';
   import Image from '../ui/components/image.svelte';
   import Markdown from '../ui/components/markdown.svelte';
   import Table from '../ui/components/table.svelte';
@@ -66,6 +67,10 @@
         if (!component.timelineProps) {
           throw new Error('Timeline component missing timelineProps');
         }
+      } else if (component.kind === 'gallery') {
+        if (!component.galleryProps) {
+          throw new Error('Gallery component missing galleryProps');
+        }
       } else {
         throw new Error(`Unknown component kind: ${component.kind}`);
       }
@@ -108,6 +113,8 @@
   <Calendar {...component.calendarProps} />
 {:else if component.kind === 'timeline' && component.timelineProps}
   <Timeline {...component.timelineProps} />
+{:else if component.kind === 'gallery' && component.galleryProps}
+  <Gallery {...component.galleryProps} />
 {:else}
   <Card title="组件开发中 / Component In Development" body="组件类型 '{component.kind}' 正在开发中，敬请期待。/ Component type '{component.kind}' is under development, stay tuned." />
 {/if}

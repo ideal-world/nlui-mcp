@@ -138,5 +138,8 @@
   "table_items": "项",
   "table_previous_page": "上一页",
   "table_next_page": "下一页",
-  "table_page": "第 {page} 页"
+  "table_page": "第 {page} 页",
+  "gallery_no_data": "暂无图片",
+  "doc_component_gallery_title": "画廊组件",
+  "doc_component_gallery_description": "画廊组件使用FlyonUI轮播样式创建图片和视频轮播，支持缩略图、导航控件和各种显示选项。"
 }

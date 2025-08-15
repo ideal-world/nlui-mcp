@@ -138,5 +138,8 @@
   "doc_component_calendar_title": "Calendar Components",
   "doc_component_calendar_description": "Calendar components provide interactive event scheduling and date management using FullCalendar library, supporting monthly, weekly, and daily views.",
   "doc_component_timeline_title": "Timeline Components",
-  "doc_component_timeline_description": "Timeline components display events along a vertical timeline using FlyonUI styles, ideal for activity feeds, milestones, and process tracking."
+  "doc_component_timeline_description": "Timeline components display events along a vertical timeline using FlyonUI styles, ideal for activity feeds, milestones, and process tracking.",
+  "doc_component_gallery_title": "Gallery Components",
+  "doc_component_gallery_description": "Gallery components create image and video carousels with thumbnails, navigation controls, and various display options using FlyonUI carousel styles.",
+  "gallery_no_data": "No images available"
 }

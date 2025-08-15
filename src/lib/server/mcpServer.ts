@@ -159,7 +159,7 @@ function generateSystemPromptZH(): string {
 ## 💡 执行指南
 
 **当使用ui-render工具时**：
-1. 根据用户需求选择最合适的组件类型（table、card、form、chart、calendar、markdown、image、video、audio等）
+1. 根据用户需求选择最合适的组件类型（table、card、form、chart、calendar、markdown、image、video、audio、gallery、timeline等）
 2. 提供真实、详细的数据内容，避免占位符
 3. 确保配置完整且符合NLUI规范
 4. 配置合理的组件属性和样式
@@ -320,6 +320,38 @@ ${formatSchemaAsDocumentation('NLUIProps', nluiSchemas.NLUIProps)}
               "start": "2025-08-30",
               "allDay": true,
               "classNames": ["fc-event-error"]
+            }
+          ]
+        }
+      }
+    },
+    "showTools": false,
+    "showDebug": false
+  }
+}
+
+{
+  "nluiProps": {
+    "block": {
+      "main": {
+        "kind": "gallery",
+        "galleryProps": {
+          "title": "产品展示画廊",
+          "items": [
+            {
+              "id": 1,
+              "src": "https://cdn.flyonui.com/fy-assets/components/carousel/image-22.png",
+              "caption": "高端游戏设备"
+            },
+            {
+              "id": 2,
+              "src": "https://cdn.flyonui.com/fy-assets/components/carousel/image-15.png",
+              "caption": "VR体验盒子"
+            },
+            {
+              "id": 3,
+              "src": "https://cdn.flyonui.com/fy-assets/components/carousel/image-16.png", 
+              "caption": "高性能笔记本电脑"
             }
           ]
         }

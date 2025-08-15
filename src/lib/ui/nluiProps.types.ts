@@ -4,6 +4,7 @@ import type { NLUICalendarComponentProps } from './components/calendar.types';
 import type { NLUICardComponentProps } from './components/card.types';
 import type { NLUIChartComponentProps } from './components/chart.types';
 import type { NLUIFormComponentProps } from './components/form.types';
+import type { NLUIGalleryComponentProps } from './components/gallery.types';
 import type { NLUIImageComponentProps } from './components/image.types';
 import type { NLUIMarkdownComponentProps } from './components/markdown.types';
 import type { NLUITableComponentProps } from './components/table.types';
@@ -60,4 +61,6 @@ export interface NLUIComponent extends BaseComponentProps {
   calendarProps?: NLUICalendarComponentProps;
   /** @conditional kind === "timeline" */
   timelineProps?: NLUITimelineComponentProps;
+  /** @conditional kind === "gallery" */
+  galleryProps?: NLUIGalleryComponentProps;
 }
