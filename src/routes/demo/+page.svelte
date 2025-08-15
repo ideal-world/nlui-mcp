@@ -46,6 +46,7 @@
     '创建系统告警信息提示框',
     '设计简单的登录表单',
     '显示操作成功提示消息',
+    '创建项目进度时间轴，展示开发阶段和关键里程碑',
     '创建项目进度日历，显示重要里程碑和会议安排',
     '整理一份主流的技术岗位清单，包含岗位名称、岗位要求、薪资建议等',
     '创建一个包含标题、代码示例和列表的Markdown文档'
@@ -190,16 +191,16 @@
 </script>
 
 <svelte:head>
-  <title>{m.app_title()} - 演示对话应用</title>
-  <meta name="description" content="NLUI MCP 演示对话应用" />
+  <title>{m.app_title()} - {m.demo_title()}</title>
+  <meta name="description" content={m.demo_description()} />
 </svelte:head>
 
 <div class="bg-base-200 flex h-screen flex-col">
   <div class="flex flex-1 flex-col px-4 py-6">
     <!-- 标题区域 -->
     <div class="mb-6 flex-shrink-0 text-center">
-      <h1 class="text-primary mb-2 text-3xl font-bold">NLUI MCP 演示</h1>
-      <p class="text-base-content/70">通过自然语言生成交互界面</p>
+      <h1 class="text-primary mb-2 text-3xl font-bold">{m.demo_title()}</h1>
+      <p class="text-base-content/70">{m.demo_description()}</p>
     </div>
 
     <!-- 对话区域 -->
@@ -274,7 +275,7 @@
             <div class="flex w-full justify-end">
               <div class="bg-secondary text-secondary-content max-w-[80%] rounded-2xl px-4 py-3">
                 <span class="loading loading-dots loading-sm"></span>
-                正在处理请求...
+                {m.demo_processing()}
               </div>
             </div>
           {/if}
@@ -311,13 +312,13 @@
 
         <!-- 输入区域 -->
         <form onsubmit={handleSubmit} class="mb-4 flex gap-2">
-          <input bind:value={userInput} placeholder="描述您想要的界面..." class="input input-bordered flex-1" disabled={isLoading} />
-          <button type="submit" class="btn btn-primary" disabled={!userInput.trim() || isLoading}> 发送 </button>
+          <input bind:value={userInput} placeholder={m.demo_input_placeholder()} class="input input-bordered flex-1" disabled={isLoading} />
+          <button type="submit" class="btn btn-primary" disabled={!userInput.trim() || isLoading}> {m.demo_send()} </button>
         </form>
 
         <!-- 示例查询 -->
         <details class="collapse-arrow bg-base-200 collapse">
-          <summary class="collapse-title text-sm font-medium">💡 点击查看示例查询</summary>
+          <summary class="collapse-title text-sm font-medium">💡 {m.demo_example_queries()}</summary>
           <div class="collapse-content">
             <div class="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto md:grid-cols-2">
               {#each exampleQueries.slice(0, 8) as query}

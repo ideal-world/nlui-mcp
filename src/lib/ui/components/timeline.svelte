@@ -41,7 +41,7 @@
 
   {#if timelineProps.items.length === 0}
     <div class="text-base-content/60 py-8 text-center">
-      {timelineProps.noDataPrompt || m.list_no_data?.() || 'No timeline items'}
+      {timelineProps.noDataPrompt || m.list_no_data?.()}
     </div>
   {:else}
     <ul class="timeline timeline-{timelineProps.direction ?? 'horizontal'} {timelineProps.size ? 'text-' + getSmallerSizeClassSuffix(timelineProps.size) : ''}">
