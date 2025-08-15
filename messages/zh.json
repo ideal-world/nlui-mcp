@@ -124,6 +124,8 @@
   "doc_component_chart_example": "图表示例",
   "doc_component_calendar_title": "日历组件",
   "doc_component_calendar_description": "日历组件使用FullCalendar库提供交互式事件调度和日期管理功能，支持月视图、周视图和日视图。",
+  "doc_component_timeline_title": "时间轴组件",
+  "doc_component_timeline_description": "时间轴组件基于 FlyonUI 的样式展示按时间顺序的事件，适用于活动动态、里程碑与流程追踪。",
   "validation_required": "{field}是必填项",
   "validation_min_length": "{field}最少需要{min}个字符",
   "validation_max_length": "{field}最多允许{max}个字符",

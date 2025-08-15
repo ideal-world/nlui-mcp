@@ -1,5 +1,5 @@
 import * as m from '../../paraglide/messages';
-import type { NLUIFormField } from '../ui/components/form.types';
+import type { FormField } from '../ui/components/form.types';
 import { isEmpty, isValidEmail } from '../utils';
 
 /**
@@ -128,7 +128,7 @@ export class FormValidator {
    * 验证整个表单
    * Validate entire form
    */
-  static validateForm(data: Record<string, any>, fields: NLUIFormField[]): ValidationResult {
+  static validateForm(data: Record<string, any>, fields: FormField[]): ValidationResult {
     const errors: Record<string, string> = {};
 
     fields.forEach((field) => {

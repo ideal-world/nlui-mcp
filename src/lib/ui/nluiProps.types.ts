@@ -8,6 +8,7 @@ import type { NLUIImageComponentProps } from './components/image.types';
 import type { NLUIMarkdownComponentProps } from './components/markdown.types';
 import type { NLUITableComponentProps } from './components/table.types';
 import type { NLUIVideoComponentProps } from './components/video.types';
+import type { NLUITimelineComponentProps } from './components/timeline.types';
 
 export interface NLUIProps {
   /** Layout structure with header, footer, sidebars, and main content */
@@ -34,7 +35,7 @@ export interface NLUIBlock {
   right?: NLUIComponent | NLUIBlock;
 }
 
-export type NLUIComponentKind = 'image' | 'video' | 'audio' | 'markdown' | 'table' | 'form' | 'card' | 'chart' | 'calendar' | 'timeline' | 'kanban' | 'gantt' | 'gallery' | 'map' | 'diagram' | 'mindmap';
+export type NLUIComponentKind = 'image' | 'video' | 'audio' | 'markdown' | 'table' | 'form' | 'card' | 'chart' | 'calendar' | 'timeline' | 'gallery' | 'mindmap';
 
 export interface NLUIComponent extends BaseComponentProps {
   /** Component type determines which UI element to render */
@@ -57,4 +58,6 @@ export interface NLUIComponent extends BaseComponentProps {
   chartProps?: NLUIChartComponentProps;
   /** @conditional kind === "calendar" */
   calendarProps?: NLUICalendarComponentProps;
+  /** @conditional kind === "timeline" */
+  timelineProps?: NLUITimelineComponentProps;
 }

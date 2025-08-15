@@ -9,6 +9,7 @@
   import Markdown from '../ui/components/markdown.svelte';
   import Table from '../ui/components/table.svelte';
   import Video from '../ui/components/video.svelte';
+  import Timeline from '../ui/components/timeline.svelte';
   import type { NLUIComponent } from '../ui/nluiProps.types';
   import RenderError from './RenderError.svelte';
 
@@ -61,6 +62,10 @@
         if (!component.calendarProps) {
           throw new Error('Calendar component missing calendarProps');
         }
+      } else if (component.kind === 'timeline') {
+        if (!component.timelineProps) {
+          throw new Error('Timeline component missing timelineProps');
+        }
       } else {
         throw new Error(`Unknown component kind: ${component.kind}`);
       }
@@ -101,6 +106,8 @@
   <Chart {...component.chartProps} />
 {:else if component.kind === 'calendar' && component.calendarProps}
   <Calendar {...component.calendarProps} />
+{:else if component.kind === 'timeline' && component.timelineProps}
+  <Timeline {...component.timelineProps} />
 {:else}
   <Card title="组件开发中 / Component In Development" body="组件类型 '{component.kind}' 正在开发中，敬请期待。/ Component type '{component.kind}' is under development, stay tuned." />
 {/if}

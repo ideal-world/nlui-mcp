@@ -140,5 +140,7 @@
   "doc_component_chart_title": "Chart Components",
   "doc_component_chart_description": "Chart components provide powerful data visualization capabilities using ApexCharts library, supporting various chart types like line, area, bar, pie, donut, and more.",
   "doc_component_calendar_title": "Calendar Components",
-  "doc_component_calendar_description": "Calendar components provide interactive event scheduling and date management using FullCalendar library, supporting monthly, weekly, and daily views."
+  "doc_component_calendar_description": "Calendar components provide interactive event scheduling and date management using FullCalendar library, supporting monthly, weekly, and daily views.",
+  "doc_component_timeline_title": "Timeline Components",
+  "doc_component_timeline_description": "Timeline components display events along a vertical timeline using FlyonUI styles, ideal for activity feeds, milestones, and process tracking."
 }

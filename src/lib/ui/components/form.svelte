@@ -4,7 +4,7 @@
   import { logger } from '../../utils/logger';
   import { FormValidator } from '../../utils/validation';
   import { getSizeClassSuffix, handleAction } from '../common/base.utils';
-  import type { NLUIFormComponentProps, NLUIFormField } from './form.types';
+  import type { NLUIFormComponentProps, FormField } from './form.types';
 
   let formProps: NLUIFormComponentProps = $props();
 
@@ -23,7 +23,7 @@
     formData = initialData;
   });
 
-  function validateField(field: NLUIFormField, value: any): string | null {
+  function validateField(field: FormField, value: any): string | null {
     try {
       const rules = {
         required: field.required,
@@ -86,7 +86,7 @@
    * 处理字段失焦验证
    * Handle field blur validation
    */
-  function handleFieldBlur(field: NLUIFormField): void {
+  function handleFieldBlur(field: FormField): void {
     const error = validateField(field, formData[field.name]);
     if (error) {
       errors = { ...errors, [field.name]: error };

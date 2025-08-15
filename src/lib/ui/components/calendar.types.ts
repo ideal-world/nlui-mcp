@@ -23,11 +23,9 @@ export interface CalendarConfig {
 }
 
 export interface CalendarEvent {
-  /** Event title */
+  id?: string;
   title: string;
-  /** Event start date/time */
   start: string;
-  /** Event end date/time */
   end?: string;
   /** Whether the event spans all day */
   allDay?: boolean;

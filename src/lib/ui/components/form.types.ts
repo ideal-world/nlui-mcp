@@ -1,11 +1,11 @@
 import type { ApiActionProps, BaseComponentProps, LinkActionProps } from '../common/base.types';
 
 export interface NLUIFormComponentProps extends BaseComponentProps {
-	fields: NLUIFormField[];
-	submitAction: LinkActionProps | ApiActionProps;
+  fields: FormField[];
+  submitAction: LinkActionProps | ApiActionProps;
 }
 
-export interface NLUIFormField {
+export interface FormField {
   name: string;
   label: string;
   type: 'text' | 'number' | 'password' | 'email' | 'url' | 'color' | 'date' | 'time' | 'datetime-local' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'file';

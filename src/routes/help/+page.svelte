@@ -14,6 +14,8 @@
   import type { NLUIMarkdownComponentProps } from '$lib/ui/components/markdown.types.js';
   import Table from '$lib/ui/components/table.svelte';
   import type { NLUITableComponentProps } from '$lib/ui/components/table.types.js';
+  import Timeline from '$lib/ui/components/timeline.svelte';
+  import type { NLUITimelineComponentProps } from '$lib/ui/components/timeline.types.js';
   import type { NLUIProps } from '$lib/ui/nluiProps.types';
   import * as m from '../../paraglide/messages';
 
@@ -234,8 +236,8 @@ This is a simpler Markdown example showing basic formatting.
           kind: 'success'
         }
       ],
-      action:{
-        linkUrl: '/calendar?title={title}',
+      action: {
+        linkUrl: '/calendar?title={title}'
       }
     },
     {
@@ -310,6 +312,32 @@ This is a simpler Markdown example showing basic formatting.
           start: '2025-08-30',
           end: '2025-09-01'
         }
+      ]
+    }
+  ];
+
+  // Timeline示例数据 / Timeline example data
+  const timelineExamples: NLUITimelineComponentProps[] = [
+    {
+      title: 'Project Milestones',
+      direction: 'vertical',
+      items: [
+        { id: 1, time: '2025-01-10', title: 'Project Kickoff', description: 'Initial meeting with stakeholders' },
+        { id: 2, time: '2025-03-05', title: 'MVP Release', description: 'Minimum viable product released to beta users', status: 'success' },
+        { id: 3, time: '2025-06-20', title: 'User Feedback', status: 'error' },
+        { id: 4, time: '2025-08-14', title: 'v1.0 Launch', description: 'Public release of version 1.0', status: 'warning' }
+      ],
+      action: {
+        linkUrl: '/timeline?item={id}'
+      }
+    },
+    {
+      title: 'Order Tracking',
+      items: [
+        { id: 'A1', time: '10:00', title: 'Order Placed' },
+        { id: 'A2', time: '12:30', title: 'Packed', status: 'success' },
+        { id: 'A3', time: '15:00', title: 'Shipped', status: 'error' },
+        { id: 'A4', time: '18:45', title: 'Delivered', status: 'warning' }
       ]
     }
   ];
@@ -805,6 +833,25 @@ This is a simpler Markdown example showing basic formatting.
       window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
     }, 100);
   }
+
+  function tryTimelineExample() {
+    const timelineExampleProp = {
+      showTools: true,
+      showDebug: true,
+      block: {
+        main: {
+          kind: 'timeline' as const,
+          timelineProps: timelineExamples[0]
+        }
+      }
+    };
+
+    const sessionId = 'timeline-demo';
+    saveNLUIPropsToSession(timelineExampleProp, sessionId);
+    setTimeout(() => {
+      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
+    }, 100);
+  }
 </script>
 
 <svelte:head>
@@ -1035,6 +1082,32 @@ This is a simpler Markdown example showing basic formatting.
 
         <div class="flex gap-4">
           <button class="btn btn-primary" onclick={tryCalendarExample}>
+            {m.help_try_example()}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline组件 / Timeline Component -->
+    <div class="card bg-base-100 mb-8 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title mb-4 text-2xl">
+          <span class="icon-[tabler--timeline] text-primary h-8 w-8"></span>
+          Timeline Components
+        </h2>
+        <p class="text-base-content/70 mb-6">Timeline components visualize events in chronological order with FlyonUI timeline styles.</p>
+
+        <!-- Timeline示例 / Timeline Examples -->
+        <div class="mb-8 grid grid-cols-1 gap-6">
+          {#each timelineExamples as t}
+            <div class="bg-base-200 rounded-lg p-4">
+              <Timeline {...t} />
+            </div>
+          {/each}
+        </div>
+
+        <div class="flex gap-4">
+          <button class="btn btn-primary" onclick={tryTimelineExample}>
             {m.help_try_example()}
           </button>
         </div>

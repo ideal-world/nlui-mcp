@@ -1,21 +1,21 @@
 import type { ApiActionProps, BaseComponentProps, LinkActionProps } from '../common/base.types';
 
 export interface NLUITableComponentProps extends BaseComponentProps {
-	columns: NLUITableColumn[];
-	rows: NLUITableRow[];
+	columns: TableColumn[];
+	rows: TableRow[];
 	actions?: LinkActionProps[] | ApiActionProps[];
 	pageSize?: number;
 	searchable?: boolean;
 }
 
-export interface NLUITableColumn {
+export interface TableColumn {
 	/** Data field key */
 	key: string;
 	title: string;
 	tagStyle?: boolean;
 }
 
-export interface NLUITableRow {
+export interface TableRow {
 	id: string | number;
 	/** Row cell data mapped by column keys */
 	data: Record<string, any>;
