@@ -8,7 +8,9 @@
   let searchQuery: string = $state('');
   let currentPage: number = $state(1);
 
-  let filteredRows = $derived(searchQuery.trim() ? tableProps.rows.filter((row) => tableProps.columns.some((column) => getCellData(row, column.key).toLowerCase().includes(searchQuery.toLowerCase()))) : tableProps.rows);
+  let filteredRows = $derived(
+    searchQuery.trim() ? (tableProps.rows || []).filter((row) => (tableProps.columns || []).some((column) => getCellData(row, column.key).toLowerCase().includes(searchQuery.toLowerCase()))) : tableProps.rows || []
+  );
 
   let totalPages = $derived(tableProps.pageSize ? Math.ceil(filteredRows.length / tableProps.pageSize) : 1);
 
@@ -53,7 +55,7 @@
     <table class={getBaseClasses('table', tableProps.size)}>
       <thead>
         <tr>
-          {#each tableProps.columns as column}
+          {#each tableProps.columns || [] as column}
             <th data-key={column.key}>{column.title}</th>
           {/each}
           {#if tableProps.actions}
@@ -62,16 +64,16 @@
         </tr>
       </thead>
       <tbody>
-        {#if pageRows.length === 0}
+        {#if (pageRows?.length || 0) === 0}
           <tr>
-            <td colspan={tableProps.columns.length + (tableProps.actions ? 1 : 0)} class="text-base-content/60 py-8 text-center">
+            <td colspan={(tableProps.columns || []).length + (tableProps.actions ? 1 : 0)} class="text-base-content/60 py-8 text-center">
               {tableProps.noDataPrompt || m.table_no_data()}
             </td>
           </tr>
         {:else}
-          {#each pageRows as row}
+          {#each pageRows || [] as row}
             <tr>
-              {#each tableProps.columns as column}
+              {#each tableProps.columns || [] as column}
                 <td>
                   {#if column.tagStyle}
                     <span class="badge badge-soft badge-success text-{getSmallerSizeClassSuffix(tableProps.size)}">
@@ -91,8 +93,7 @@
                       </button>
                     {:else}
                       <button class="btn btn-circle btn-text btn-{getSmallerSizeClassSuffix(tableProps.size)}" aria-label={action.label || ''} onclick={() => handleAction('table', action, { id: row.id })}
-                        >{action.label || '...'}</button
-                      >
+                        >{action.label || '...'}</button>
                     {/if}
                   {/each}
                 </td>

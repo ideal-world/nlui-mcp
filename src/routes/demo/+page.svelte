@@ -37,25 +37,52 @@
   // 对话区域引用，用于自动滚动
   let messagesContainer: HTMLDivElement;
 
-  // 示例用户查询
-  const exampleQueries = [
-    '显示员工信息表格，包含姓名、邮箱、职位字段',
-    '创建iPhone 15 Pro产品展示卡片',
-    '生成用户注册表单，包含基本信息字段',
-    '显示待办事项列表，支持搜索功能',
-    '创建系统告警信息提示框',
-    '生成一组照片概览',
-    '设计简单的登录表单',
-    '显示操作成功提示消息',
-    '创建项目进度时间轴，展示开发阶段和关键里程碑',
-    '创建项目进度日历，显示重要里程碑和会议安排',
-    '整理一份主流的技术岗位清单，包含岗位名称、岗位要求、薪资建议等',
-    '创建一个包含标题、代码示例和列表的Markdown文档'
+  // 示例用户查询 - 分类组织
+  const exampleCategories = [
+    {
+      title: '数据展示',
+      icon: '📊',
+      examples: [
+        '显示员工信息表格，包含姓名、邮箱、职位、部门字段',
+        '创建2024年销售业绩图表，显示月度趋势',
+        '生成项目进度时间轴，包含设计、开发、测试、发布阶段',
+        '整理技术岗位薪资对比表，包含前端、后端、全栈职位',
+        '显示用户反馈统计饼图，按满意度分类'
+      ]
+    },
+    {
+      title: '内容展示',
+      icon: '📝',
+      examples: ['创建iPhone 15 Pro产品展示卡片，包含规格和价格', '生成团队成员介绍卡片，包含照片和职责', '创建API使用指南的Markdown文档', '展示公司发展历程时间轴', '设计产品功能特色卡片组']
+    },
+    {
+      title: '表单交互',
+      icon: '📋',
+      examples: ['设计用户注册表单，包含验证和必填项', '创建客户反馈收集表单，支持多种输入类型', '生成活动报名表单，包含个人信息和选择项', '设计简洁的联系我们表单', '创建产品订购表单，包含数量和规格选择']
+    },
+    {
+      title: '媒体内容',
+      icon: '🖼️',
+      examples: ['创建产品图片画廊，支持轮播展示', '生成团队活动照片集合', '展示办公环境图片轮播', '创建设计作品集画廊', '显示客户案例图片展示']
+    },
+    {
+      title: '日程安排',
+      icon: '📅',
+      examples: ['创建团队会议日程安排', '生成项目里程碑日历视图', '显示培训课程时间表', '创建产品发布计划日历', '展示公司活动安排']
+    }
   ];
+
+  let selectedCategory = $state('数据展示');
+  let currentExamples = $derived(exampleCategories.find((cat) => cat.title === selectedCategory)?.examples || []);
 
   // 更新会话信息
   function updateSessionInfo() {
     sessionInfo = getSessionInfoClient(currentSessionId);
+  }
+
+  // 使用示例查询
+  function useExample(query: string) {
+    userInput = query;
   }
 
   // 自动滚动到最后一条消息
@@ -157,10 +184,6 @@
     } catch (error) {
       console.error('❌ 重置会话失败:', error);
     }
-  }
-
-  function useExample(query: string) {
-    userInput = query;
   }
 
   function getIframeUrl(uiUrl: string): string {
@@ -265,8 +288,7 @@
                       loading="lazy"
                       sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                       onload={() => handleIframeLoad(message.timestamp)}
-                      onloadstart={() => handleIframeStart(message.timestamp)}
-                    ></iframe>
+                      onloadstart={() => handleIframeStart(message.timestamp)}></iframe>
                   </div>
                 </div>
               </div>
@@ -322,12 +344,37 @@
         <details class="collapse-arrow bg-base-200 collapse">
           <summary class="collapse-title text-sm font-medium">💡 {m.demo_example_queries()}</summary>
           <div class="collapse-content">
-            <div class="grid max-h-40 grid-cols-1 gap-2 overflow-y-auto md:grid-cols-2">
-              {#each exampleQueries.slice(0, 8) as query}
-                <button class="btn btn-outline btn-sm h-auto justify-start py-2 text-left text-xs" onclick={() => useExample(query)} disabled={isLoading}>
+            <!-- 分类选择器 -->
+            <div class="mb-4 flex flex-wrap gap-2">
+              {#each exampleCategories as category}
+                <button class="btn btn-sm {selectedCategory === category.title ? 'btn-primary' : 'btn-outline'}" onclick={() => (selectedCategory = category.title)} disabled={isLoading}>
+                  {category.icon}
+                  {category.title}
+                </button>
+              {/each}
+            </div>
+
+            <!-- 示例查询列表 -->
+            <div class="grid max-h-48 grid-cols-1 gap-2 overflow-y-auto">
+              {#each currentExamples as query}
+                <button class="btn btn-outline btn-sm hover:btn-primary h-auto justify-start py-2 text-left text-xs" onclick={() => useExample(query)} disabled={isLoading}>
                   {query}
                 </button>
               {/each}
+            </div>
+
+            <!-- 提示信息 -->
+            <div class="bg-info/10 mt-3 flex items-start gap-2 rounded-lg p-3 text-xs">
+              <span class="text-info">💡</span>
+              <div class="text-base-content/70">
+                <div class="font-medium">使用提示：</div>
+                <ul class="list-inside list-disc space-y-1 text-xs">
+                  <li>点击任意示例查询直接发送给AI</li>
+                  <li>AI会根据需求智能选择合适的组件类型</li>
+                  <li>生成的界面支持交互和在新窗口打开</li>
+                  <li>尝试不同类别的示例体验各种组件功能</li>
+                </ul>
+              </div>
             </div>
           </div>
         </details>

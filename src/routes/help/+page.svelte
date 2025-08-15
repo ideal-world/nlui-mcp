@@ -1,1216 +1,281 @@
 <script lang="ts">
-  import { saveNLUIPropsToSession } from '$lib/client/nluiPropProcessor';
-  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
-  import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
-  import Calendar from '$lib/ui/components/calendar.svelte';
-  import type { NLUICalendarComponentProps } from '$lib/ui/components/calendar.types.js';
-  import Card from '$lib/ui/components/card.svelte';
-  import type { NLUICardComponentProps } from '$lib/ui/components/card.types.js';
-  import Chart from '$lib/ui/components/chart.svelte';
-  import type { NLUIChartComponentProps } from '$lib/ui/components/chart.types.js';
-  import Form from '$lib/ui/components/form.svelte';
-  import type { NLUIFormComponentProps } from '$lib/ui/components/form.types.js';
-  import Gallery from '$lib/ui/components/gallery.svelte';
-  import type { NLUIGalleryComponentProps } from '$lib/ui/components/gallery.types.js';
-  import Markdown from '$lib/ui/components/markdown.svelte';
-  import type { NLUIMarkdownComponentProps } from '$lib/ui/components/markdown.types.js';
-  import Table from '$lib/ui/components/table.svelte';
-  import type { NLUITableComponentProps } from '$lib/ui/components/table.types.js';
-  import Timeline from '$lib/ui/components/timeline.svelte';
-  import type { NLUITimelineComponentProps } from '$lib/ui/components/timeline.types.js';
-  import type { NLUIProps } from '$lib/ui/nluiProps.types';
+  import ExampleCard from './components/ExampleCard.svelte';
   import * as m from '../../paraglide/messages';
 
-  // Card示例数据 / Card example data
-  const cardExamples: NLUICardComponentProps[] = [
+  // 导入所有组件
+  import Card from '$lib/ui/components/card.svelte';
+  import Table from '$lib/ui/components/table.svelte';
+  import Form from '$lib/ui/components/form.svelte';
+  import Chart from '$lib/ui/components/chart.svelte';
+  import Calendar from '$lib/ui/components/calendar.svelte';
+  import Timeline from '$lib/ui/components/timeline.svelte';
+  import Gallery from '$lib/ui/components/gallery.svelte';
+  import Markdown from '$lib/ui/components/markdown.svelte';
+  import Image from '$lib/ui/components/image.svelte';
+  import Video from '$lib/ui/components/video.svelte';
+  import Audio from '$lib/ui/components/audio.svelte';
+
+  // 导入所有组件示例数据
+  import { getCardExamples } from './examples/cardExamples';
+  import { getTableExamples } from './examples/tableExamples';
+  import { getFormExamples } from './examples/formExamples';
+  import { getChartExamples } from './examples/chartExamples';
+  import { getCalendarExamples } from './examples/calendarExamples';
+  import { getTimelineExamples } from './examples/timelineExamples';
+  import { getGalleryExamples } from './examples/galleryExamples';
+  import { getMarkdownExamples } from './examples/markdownExamples';
+  import { getImageExamples } from './examples/imageExamples';
+  import { getVideoExamples } from './examples/videoExamples';
+  import { getAudioExamples } from './examples/audioExamples';
+
+  const componentSections = [
     {
-      title: 'Basic Card',
-      body: 'This is a basic card example with title and body content.',
-      primaryAction: {
-        label: 'Learn More',
-        linkUrl: '#',
-        target: '_self'
-      }
+      id: 'card',
+      title: m.doc_component_card_title(),
+      description: m.doc_component_card_description(),
+      examples: getCardExamples(),
+      component: Card
     },
     {
-      title: 'Card with Image',
-      body: 'This card includes an image and demonstrates the visual layout.',
-      image: 'https://picsum.photos/400/300?random=1',
-      footer: 'Card footer content',
-      primaryAction: {
-        label: 'View Details',
-        linkUrl: '#',
-        target: '_self'
-      },
-      secondaryAction: {
-        label: 'Share',
-        linkUrl: '#',
-        target: '_blank'
-      }
+      id: 'table',
+      title: m.doc_component_table_title(),
+      description: m.doc_component_table_description(),
+      examples: getTableExamples(),
+      component: Table
     },
     {
-      title: 'Horizontal Card',
-      body: 'This is a horizontal layout card that displays content side by side.',
-      image: 'https://picsum.photos/300/200?random=2',
-      primaryAction: {
-        label: 'Get Started',
-        linkUrl: '#',
-        target: '_self'
-      }
+      id: 'form',
+      title: m.doc_component_form_title(),
+      description: m.doc_component_form_description(),
+      examples: getFormExamples(),
+      component: Form
+    },
+    {
+      id: 'chart',
+      title: m.doc_component_chart_title(),
+      description: m.doc_component_chart_description(),
+      examples: getChartExamples(),
+      component: Chart
+    },
+    {
+      id: 'calendar',
+      title: m.doc_component_calendar_title(),
+      description: m.doc_component_calendar_description(),
+      examples: getCalendarExamples(),
+      component: Calendar
+    },
+    {
+      id: 'timeline',
+      title: m.doc_component_timeline_title(),
+      description: m.doc_component_timeline_description(),
+      examples: getTimelineExamples(),
+      component: Timeline
+    },
+    {
+      id: 'gallery',
+      title: m.doc_component_gallery_title(),
+      description: m.doc_component_gallery_description(),
+      examples: getGalleryExamples(),
+      component: Gallery
+    },
+    {
+      id: 'markdown',
+      title: m.doc_component_markdown_title(),
+      description: m.doc_component_markdown_description(),
+      examples: getMarkdownExamples(),
+      component: Markdown
+    },
+    {
+      id: 'image',
+      title: m.doc_component_image_title(),
+      description: m.doc_component_image_description(),
+      examples: getImageExamples(),
+      component: Image
+    },
+    {
+      id: 'video',
+      title: m.doc_component_video_title(),
+      description: m.doc_component_video_description(),
+      examples: getVideoExamples(),
+      component: Video
+    },
+    {
+      id: 'audio',
+      title: m.doc_component_audio_title(),
+      description: m.doc_component_audio_description(),
+      examples: getAudioExamples(),
+      component: Audio
     }
   ];
-
-  // Markdown示例数据 / Markdown example data
-  const markdownExamples: NLUIMarkdownComponentProps[] = [
-    {
-      title: 'Markdown Example',
-      content: `
-# Welcome to NLUI Markdown
-
-This is an example of how Markdown content is rendered in NLUI.
-
-## Features
-
-- **Bold text** and *italic text*
-- Code snippets: \`console.log('Hello NLUI!')\`
-- Lists like this one
-- [Links](https://example.com)
-
-### Code Block Example
-
-\`\`\`javascript
-function greet(name) {
-  return \`Hello, \${name}!\`;
-}
-
-console.log(greet('NLUI User'));
-\`\`\`
-
-> This is a blockquote demonstrating how quotes look in the Markdown component.
-`
-    },
-    {
-      title: 'Simple Markdown',
-      content: `
-## Simple Content
-
-This is a simpler Markdown example showing basic formatting.
-
-1. First item
-2. Second item
-3. Third item
-
-**Bold text** and *italic text* can be used for emphasis.
-`
-    }
-  ];
-
-  // Chart示例数据 / Chart example data
-  const chartExamples: NLUIChartComponentProps[] = [
-    {
-      title: 'Line Chart Example',
-      config: {
-        chart: {
-          type: 'line'
-        },
-        xaxis: {
-          type: 'category',
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        }
-      },
-      series: [
-        {
-          name: 'Revenue',
-          data: [30000, 40000, 35000, 50000, 49000, 60000, 70000, 91000, 69000, 62000, 48000, 50000]
-        }
-      ]
-    },
-    {
-      title: 'Multi-Series Area Chart',
-      config: {
-        chart: {
-          type: 'area'
-        },
-        xaxis: {
-          type: 'category',
-          categories: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6']
-        }
-      },
-      series: [
-        {
-          name: 'Desktop',
-          data: [2800, 3200, 2900, 3400, 3100, 3600]
-        },
-        {
-          name: 'Mobile',
-          data: [1800, 2100, 2400, 2200, 2800, 2600]
-        },
-        {
-          name: 'Tablet',
-          data: [800, 900, 750, 1100, 950, 1200]
-        }
-      ]
-    },
-    {
-      title: 'Column Chart with Data Labels',
-      config: {
-        chart: {
-          type: 'bar'
-        },
-        xaxis: {
-          categories: ['Product A', 'Product B', 'Product C', 'Product D', 'Product E', 'Product F']
-        }
-      },
-      series: [
-        {
-          name: 'Sales',
-          data: [440, 505, 414, 671, 227, 413]
-        }
-      ]
-    },
-    {
-      title: 'Pie Chart Distribution',
-      config: {
-        chart: {
-          type: 'pie'
-        },
-        labels: ['Desktop', 'Mobile', 'Tablet', 'Others', 'Unknown']
-      },
-      series: [65.2, 18.4, 9.1, 4.2, 3.1]
-    },
-    {
-      title: 'Donut Chart with Total',
-      config: {
-        chart: {
-          type: 'donut'
-        },
-        labels: ['Team A', 'Team B', 'Team C', 'Team D']
-      },
-      series: [58, 23, 12, 7]
-    },
-    {
-      title: 'Radial Bar Chart',
-      config: {
-        chart: {
-          type: 'radialBar'
-        },
-        labels: ['Progress']
-      },
-      series: [75]
-    }
-  ];
-
-  // Calendar示例数据 / Calendar example data
-  const calendarExamples: NLUICalendarComponentProps[] = [
-    {
-      title: 'Basic Calendar',
-      config: {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        }
-      },
-      events: [
-        {
-          title: 'Team Meeting',
-          start: '2025-08-15T10:00:00',
-          end: '2025-08-15T11:30:00',
-          kind: 'success'
-        },
-        {
-          title: 'Project Deadline',
-          start: '2025-08-20',
-          allDay: true,
-          kind: 'error'
-        },
-        {
-          title: 'Code Review',
-          start: '2025-08-16T14:00:00',
-          end: '2025-08-16T15:00:00',
-          kind: 'info'
-        },
-        {
-          title: 'Lunch Break',
-          start: '2025-08-17T12:00:00',
-          end: '2025-08-17T13:00:00',
-          kind: 'success'
-        }
-      ],
-      action: {
-        linkUrl: '/calendar?title={title}'
-      }
-    },
-    {
-      title: 'Weekly Schedule',
-      config: {
-        initialView: 'timeGridWeek',
-        headerToolbar: {
-          left: 'prev,next',
-          center: 'title',
-          right: 'timeGridWeek,timeGridDay'
-        }
-      },
-      events: [
-        {
-          title: 'Daily Standup',
-          start: '2025-08-12T09:00:00',
-          end: '2025-08-12T09:30:00',
-          kind: 'success'
-        },
-        {
-          title: 'Development Work',
-          start: '2025-08-12T10:00:00',
-          end: '2025-08-12T12:00:00',
-          kind: 'info'
-        },
-        {
-          title: 'Client Presentation',
-          start: '2025-08-13T15:00:00',
-          end: '2025-08-13T16:30:00',
-          kind: 'warning'
-        },
-        {
-          title: 'Team Retrospective',
-          start: '2025-08-14T16:00:00',
-          end: '2025-08-14T17:00:00'
-        }
-      ]
-    },
-    {
-      title: 'Event Categories',
-      config: {
-        initialView: 'dayGridMonth'
-      },
-      events: [
-        {
-          title: 'Important Meeting',
-          start: '2025-08-15',
-          kind: 'success'
-        },
-        {
-          title: 'Deadline Alert',
-          start: '2025-08-18',
-          kind: 'error'
-        },
-        {
-          title: 'New Feature Launch',
-          start: '2025-08-22',
-          kind: 'success'
-        },
-        {
-          title: 'Training Session',
-          start: '2025-08-25',
-          kind: 'info'
-        },
-        {
-          title: 'Team Building',
-          start: '2025-08-28',
-          kind: 'warning'
-        },
-        {
-          title: 'Conference',
-          start: '2025-08-30',
-          end: '2025-09-01'
-        }
-      ]
-    }
-  ];
-
-  // Timeline示例数据 / Timeline example data
-  const timelineExamples: NLUITimelineComponentProps[] = [
-    {
-      title: 'Project Milestones',
-      direction: 'vertical',
-      items: [
-        { id: 1, time: '2025-01-10', title: 'Project Kickoff', description: 'Initial meeting with stakeholders' },
-        { id: 2, time: '2025-03-05', title: 'MVP Release', description: 'Minimum viable product released to beta users', status: 'success' },
-        { id: 3, time: '2025-06-20', title: 'User Feedback', status: 'error' },
-        { id: 4, time: '2025-08-14', title: 'v1.0 Launch', description: 'Public release of version 1.0', status: 'warning' }
-      ],
-      action: {
-        linkUrl: '/timeline?item={id}'
-      }
-    },
-    {
-      title: 'Order Tracking',
-      items: [
-        { id: 'A1', time: '10:00', title: 'Order Placed' },
-        { id: 'A2', time: '12:30', title: 'Packed', status: 'success' },
-        { id: 'A3', time: '15:00', title: 'Shipped', status: 'error' },
-        { id: 'A4', time: '18:45', title: 'Delivered', status: 'warning' }
-      ]
-    }
-  ];
-
-  // Gallery示例数据 / Gallery example data
-  const galleryExamples: NLUIGalleryComponentProps[] = [
-    {
-      title: 'Product Showcase',
-      items: [
-        {
-          id: '1',
-          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-22.png',
-          caption: 'High-end gaming equipment'
-        },
-        {
-          id: '2',
-          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-15.png',
-          caption: 'Virtual Reality Experience Box'
-        },
-        {
-          id: '3',
-          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-16.png',
-          caption: 'High-performance laptop'
-        },
-        {
-          id: '4',
-          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-8.png',
-          caption: 'Professional VR headset'
-        }
-      ],
-      action: {
-        linkUrl: '/gallery?item={id}'
-      }
-    },
-    {
-      title: 'Simple Image Gallery',
-      items: [
-        {
-          id: '1',
-          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-21.png',
-          caption: 'Beautiful mountain landscape'
-        },
-        {
-          id: '2',
-          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-14.png',
-          caption: 'Stunning desert view'
-        },
-        {
-          id: '3',
-          src: 'https://cdn.flyonui.com/fy-assets/components/carousel/image-7.png',
-          caption: 'Amazing cloud formations'
-        }
-      ]
-    }
-  ];
-
-  // Table示例数据 / Table example data
-  const basicTableData: NLUITableComponentProps = {
-    title: 'User Management Table',
-    columns: [
-      { key: 'id', title: 'ID' },
-      { key: 'name', title: 'Name' },
-      { key: 'email', title: 'Email' },
-      { key: 'role', title: 'Role', tagStyle: true },
-      { key: 'status', title: 'Status', tagStyle: true }
-    ],
-    rows: [
-      {
-        id: 1,
-        data: {
-          id: 1,
-          name: 'John Doe',
-          email: 'john@example.com',
-          role: 'Admin',
-          status: 'Active'
-        }
-      },
-      {
-        id: 2,
-        data: {
-          id: 2,
-          name: 'Jane Smith',
-          email: 'jane@example.com',
-          role: 'User',
-          status: 'Inactive'
-        }
-      },
-      {
-        id: 3,
-        data: {
-          id: 3,
-          name: 'Bob Johnson',
-          email: 'bob@example.com',
-          role: 'Moderator',
-          status: 'Active'
-        }
-      },
-      {
-        id: 4,
-        data: {
-          id: 4,
-          name: 'Alice Williams',
-          email: 'alice@example.com',
-          role: 'User',
-          status: 'Active'
-        }
-      },
-      {
-        id: 5,
-        data: {
-          id: 5,
-          name: 'Charlie Brown',
-          email: 'charlie@example.com',
-          role: 'User',
-          status: 'Inactive'
-        }
-      },
-      {
-        id: 6,
-        data: {
-          id: 6,
-          name: 'Diana Prince',
-          email: 'diana@example.com',
-          role: 'User',
-          status: 'Active'
-        }
-      },
-      {
-        id: 7,
-        data: {
-          id: 7,
-          name: 'Bruce Wayne',
-          email: 'bruce@example.com',
-          role: 'User',
-          status: 'Inactive'
-        }
-      },
-      {
-        id: 8,
-        data: {
-          id: 8,
-          name: 'Clark Kent',
-          email: 'clark@example.com',
-          role: 'User',
-          status: 'Active'
-        }
-      },
-      {
-        id: 9,
-        data: {
-          id: 9,
-          name: 'Peter Parker',
-          email: 'peter@example.com',
-          role: 'User',
-          status: 'Active'
-        }
-      },
-      {
-        id: 10,
-        data: {
-          id: 10,
-          name: 'Tony Stark',
-          email: 'tony@example.com',
-          role: 'User',
-          status: 'Inactive'
-        }
-      },
-      {
-        id: 11,
-        data: {
-          id: 11,
-          name: 'Natasha Romanoff',
-          email: 'natasha@example.com',
-          role: 'User',
-          status: 'Active'
-        }
-      },
-      {
-        id: 12,
-        data: {
-          id: 12,
-          name: 'Wanda Maximoff',
-          email: 'wanda@example.com',
-          role: 'User',
-          status: 'Inactive'
-        }
-      }
-    ],
-    actions: [
-      { label: 'Edit', linkUrl: 'http://www.example.com/edit/id={id}', target: '_self', type: 'edit' },
-      { label: 'Delete', linkUrl: 'http://www.example.com/delete/id={id}', target: '_self', type: 'delete' }
-    ],
-    pageSize: 10,
-    searchable: true
-  };
-
-  const simpleTableData: NLUITableComponentProps = {
-    columns: [
-      { key: 'product', title: 'Product' },
-      { key: 'price', title: 'Price' },
-      { key: 'stock', title: 'Stock' }
-    ],
-    rows: [
-      { id: 1, data: { product: 'Laptop', price: '$999', stock: '15' } },
-      { id: 2, data: { product: 'Phone', price: '$599', stock: '32' } },
-      { id: 3, data: { product: 'Tablet', price: '$399', stock: '8' } }
-    ]
-  };
-
-  // Form示例数据 / Form example data
-  const basicFormData: NLUIFormComponentProps = {
-    size: 'sm',
-    title: 'User Registration Form',
-    fields: [
-      {
-        name: 'firstName',
-        label: 'First Name',
-        type: 'text',
-        required: true,
-        defaultValue: 'John',
-        placeholder: 'Enter your first name',
-        validation: {
-          min: 2,
-          max: 50
-        }
-      },
-      {
-        name: 'lastName',
-        label: 'Last Name',
-        type: 'text',
-        required: true,
-        placeholder: 'Enter your last name',
-        validation: {
-          min: 2,
-          max: 50
-        }
-      },
-      {
-        name: 'email',
-        label: 'Email Address',
-        type: 'email',
-        required: true,
-        placeholder: 'Enter your email address',
-        helpText: 'We will never share your email with anyone else.'
-      },
-      {
-        name: 'password',
-        label: 'Password',
-        type: 'password',
-        required: true,
-        placeholder: 'Create a strong password',
-        validation: {
-          min: 8,
-          max: 100,
-          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$'
-        },
-        helpText: 'Password must contain at least 8 characters with uppercase, lowercase, and number.'
-      },
-      {
-        name: 'age',
-        label: 'Age',
-        type: 'number',
-        required: true,
-        defaultValue: 21,
-        validation: {
-          min: 20,
-          max: 120
-        }
-      },
-      {
-        name: 'country',
-        label: 'Country',
-        type: 'select',
-        required: true,
-        options: [
-          { label: 'Select Country', value: '' },
-          { label: 'United States', value: 'us' },
-          { label: 'China', value: 'cn' },
-          { label: 'United Kingdom', value: 'uk' },
-          { label: 'Germany', value: 'de' },
-          { label: 'Japan', value: 'jp' }
-        ]
-      },
-      {
-        name: 'bio',
-        label: 'Biography',
-        type: 'textarea',
-        placeholder: 'Tell us about yourself...',
-        validation: {
-          max: 500
-        },
-        helpText: 'Optional. Maximum 500 characters.'
-      },
-      {
-        name: 'newsletter',
-        label: 'Subscribe to Newsletter',
-        type: 'checkbox',
-        multiple: true,
-        options: [
-          { label: 'Product Updates', value: 'product_updates' },
-          { label: 'Feature Announcements', value: 'feature_announcements' },
-          { label: 'Event Invitations', value: 'event_invitations' },
-          { label: 'Promotions', value: 'promotions' }
-        ],
-        defaultValue: ['product_updates', 'feature_announcements'],
-        helpText: 'Select the types of newsletter you want to receive.'
-      },
-      {
-        name: 'isChecked',
-        label: 'Is Checked',
-        type: 'checkbox',
-        defaultValue: true,
-        helpText: 'Select the types of newsletter you want to receive.'
-      },
-      {
-        name: 'gender',
-        label: 'Gender',
-        type: 'radio',
-        options: [
-          { label: 'Male', value: 'male' },
-          { label: 'Female', value: 'female' },
-          { label: 'Other', value: 'other' },
-          { label: 'Prefer not to say', value: 'not_specified' }
-        ]
-      },
-      {
-        name: 'fileUpload',
-        label: 'File Upload',
-        type: 'file',
-        multiple: true,
-        required: true,
-        helpText: 'Upload your profile picture.'
-      }
-    ],
-    submitAction: {
-      label: 'Create Account',
-      linkUrl: '/api/register',
-      target: '_self'
-    }
-  };
-
-  const simpleFormData: NLUIFormComponentProps = {
-    title: 'Contact Form',
-    fields: [
-      {
-        name: 'name',
-        label: 'Name',
-        type: 'text',
-        required: true,
-        placeholder: 'Your name'
-      },
-      {
-        name: 'email',
-        label: 'Email',
-        type: 'email',
-        required: true,
-        placeholder: 'your@email.com'
-      },
-      {
-        name: 'message',
-        label: 'Message',
-        type: 'textarea',
-        required: true,
-        placeholder: 'Your message...',
-        validation: {
-          min: 10,
-          max: 1000
-        }
-      }
-    ],
-    submitAction: {
-      label: 'Send Message',
-      linkUrl: '/api/contact',
-      target: '_self'
-    }
-  };
-
-  const exampleProp: NLUIProps = {
-    showTools: true,
-    showDebug: true,
-    block: {
-      main: {
-        kind: 'card',
-        cardProps: {
-          title: 'Welcome to NLUI',
-          body: 'This is an example card component rendered by NLUI framework.',
-          footer: 'NLUI Framework v1.0'
-        }
-      }
-    }
-  };
-
-  function tryExample() {
-    const sessionId = 'demo-session';
-
-    // 先保存到 sessionStorage
-    saveNLUIPropsToSession(exampleProp, sessionId);
-
-    // 确保保存完成后再刷新，添加URL参数以确保重新检测
-    setTimeout(() => {
-      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
-    }, 100);
-  }
-
-  function tryCardExample() {
-    // 创建包含card组件的示例配置 - 使用第一个卡片作为main
-    const cardExampleProp = {
-      showTools: true,
-      showDebug: false,
-      block: {
-        main: {
-          kind: 'card' as const,
-          cardProps: cardExamples[0]
-        }
-      }
-    };
-
-    const sessionId = 'card-demo';
-
-    // 先保存到 sessionStorage
-    saveNLUIPropsToSession(cardExampleProp, sessionId);
-
-    // 确保保存完成后再刷新，添加URL参数以确保重新检测
-    setTimeout(() => {
-      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
-    }, 100);
-  }
-
-  function tryTableExample() {
-    // 创建包含table组件的示例配置
-    const tableExampleProp = {
-      showTools: true,
-      showDebug: true,
-      block: {
-        main: {
-          kind: 'table' as const,
-          tableProps: basicTableData
-        }
-      }
-    };
-
-    const sessionId = 'table-demo';
-
-    // 先保存到 sessionStorage
-    saveNLUIPropsToSession(tableExampleProp, sessionId);
-
-    // 确保保存完成后再刷新，添加URL参数以确保重新检测
-    setTimeout(() => {
-      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
-    }, 100);
-  }
-
-  function tryFormExample() {
-    // 创建包含form组件的示例配置
-    const formExampleProp = {
-      showTools: true,
-      showDebug: true,
-      block: {
-        main: {
-          kind: 'form' as const,
-          formProps: basicFormData
-        }
-      }
-    };
-
-    const sessionId = 'form-demo';
-
-    // 先保存到 sessionStorage
-    saveNLUIPropsToSession(formExampleProp, sessionId);
-
-    // 确保保存完成后再刷新，添加URL参数以确保重新检测
-    setTimeout(() => {
-      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
-    }, 100);
-  }
-
-  function tryMarkdownExample() {
-    // 创建包含markdown组件的示例配置
-    const markdownExampleProp = {
-      showTools: true,
-      showDebug: true,
-      block: {
-        main: {
-          kind: 'markdown' as const,
-          markdownProps: markdownExamples[0]
-        }
-      }
-    };
-
-    const sessionId = 'markdown-demo';
-
-    // 先保存到 sessionStorage
-    saveNLUIPropsToSession(markdownExampleProp, sessionId);
-
-    // 确保保存完成后再刷新，添加URL参数以确保重新检测
-    setTimeout(() => {
-      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
-    }, 100);
-  }
-
-  function tryChartExample() {
-    // 创建包含chart组件的示例配置
-    const chartExampleProp = {
-      showTools: true,
-      showDebug: true,
-      block: {
-        main: {
-          kind: 'chart' as const,
-          chartProps: chartExamples[0]
-        }
-      }
-    };
-
-    const sessionId = 'chart-demo';
-
-    // 先保存到 sessionStorage
-    saveNLUIPropsToSession(chartExampleProp, sessionId);
-
-    // 确保保存完成后再刷新，添加URL参数以确保重新检测
-    setTimeout(() => {
-      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
-    }, 100);
-  }
-
-  function tryCalendarExample() {
-    // 创建包含calendar组件的示例配置
-    const calendarExampleProp = {
-      showTools: true,
-      showDebug: true,
-      block: {
-        main: {
-          kind: 'calendar' as const,
-          calendarProps: calendarExamples[0]
-        }
-      }
-    };
-
-    const sessionId = 'calendar-demo';
-
-    // 先保存到 sessionStorage
-    saveNLUIPropsToSession(calendarExampleProp, sessionId);
-
-    // 确保保存完成后再刷新，添加URL参数以确保重新检测
-    setTimeout(() => {
-      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
-    }, 100);
-  }
-
-  function tryTimelineExample() {
-    const timelineExampleProp = {
-      showTools: true,
-      showDebug: true,
-      block: {
-        main: {
-          kind: 'timeline' as const,
-          timelineProps: timelineExamples[0]
-        }
-      }
-    };
-
-    const sessionId = 'timeline-demo';
-    saveNLUIPropsToSession(timelineExampleProp, sessionId);
-    setTimeout(() => {
-      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
-    }, 100);
-  }
-
-  function tryGalleryExample() {
-    const galleryExampleProp = {
-      showTools: true,
-      showDebug: true,
-      block: {
-        main: {
-          kind: 'gallery' as const,
-          galleryProps: galleryExamples[0]
-        }
-      }
-    };
-
-    const sessionId = 'gallery-demo';
-    saveNLUIPropsToSession(galleryExampleProp, sessionId);
-    setTimeout(() => {
-      window.location.href = `${window.location.origin}?sessionId=${sessionId}`;
-    }, 100);
-  }
 </script>
 
-<svelte:head>
-  <title>{m.help_page_title()}</title>
-  <meta name="description" content={m.help_page_description()} />
-</svelte:head>
-
-<!-- 顶部工具栏 / Top Toolbar -->
-<div class="border-base-300 bg-base-100/80 relative z-50 border-b px-4 py-3 backdrop-blur-sm">
-  <div class="mx-auto flex max-w-4xl items-center justify-between">
-    <div class="flex items-center gap-3">
-      <h1 class="text-base-content text-lg font-semibold">NLUI</h1>
-      <span class="text-base-content/50 text-sm">•</span>
-      <span class="text-base-content/70 text-sm">{m.help_page_title()}</span>
-    </div>
-    <div class="flex items-center gap-3">
-      <ThemeSwitcher />
-      <LanguageSwitcher />
+<div class="from-base-100 via-base-200/30 to-base-300/20 relative min-h-screen bg-gradient-to-br">
+  <!-- 固定在顶部的组件导航 -->
+  <div class="bg-base-100/95 border-base-300/50 fixed top-0 right-0 left-0 z-10 border-b shadow-sm backdrop-blur-md">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex flex-wrap justify-center gap-2">
+        {#each componentSections as section}
+          <a href="#{section.id}" class="btn btn-sm btn-ghost hover:btn-primary text-xs transition-all duration-200">
+            {section.title}
+          </a>
+        {/each}
+      </nav>
     </div>
   </div>
-</div>
 
-<!-- 帮助页面主体 / Help Page Content -->
-<div class="bg-base-200 min-h-screen px-8 py-6">
-  <div class="mx-auto max-w-4xl">
-    <div class="mb-8 text-center">
-      <h1 class="text-base-content mb-3 text-3xl font-bold md:text-4xl">
-        {m.help_page_title()}
+  <div class="container mx-auto px-4 pt-24 pb-12">
+    <!-- 页面标题和说明 -->
+    <div class="mb-12 text-center">
+      <div class="bg-primary/10 mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full">
+        <span class="icon-[lucide--book-open] text-primary size-10"></span>
+      </div>
+      <h1 class="from-primary to-secondary mb-4 bg-gradient-to-r bg-clip-text text-5xl font-bold text-transparent">
+        {m.help_title()}
       </h1>
-      <p class="text-base-content/70 mb-6 text-lg">
-        {m.help_page_description()}
+      <p class="text-base-content/80 mx-auto mb-8 max-w-3xl text-xl leading-relaxed">
+        {m.help_description()}
       </p>
     </div>
 
-    <div class="space-y-8">
-      <!-- 使用说明 / Usage Instructions -->
-      <div class="bg-base-100 rounded-lg p-6 shadow-lg">
-        <h2 class="text-base-content mb-4 text-2xl font-bold">
-          {m.help_usage_title()}
-        </h2>
-        <p class="text-base-content/70 mb-6">
-          {m.help_usage_description()}
-        </p>
-
-        <div class="grid gap-6 md:grid-cols-2">
-          <!-- URL参数方式 / URL Parameters -->
-          <div class="bg-primary/10 rounded-lg p-4">
-            <h3 class="text-primary mb-2 text-lg font-semibold">
-              {m.help_url_params()}
-            </h3>
-            <p class="text-primary/70 mb-3 text-sm">
-              {m.help_url_params_description()}
-            </p>
-            <code class="bg-primary/20 text-primary block rounded p-2 text-xs">
-              ?nlui={'{'}"version":"1.0.0",...{'}'}&sessionId=your-session-id
-            </code>
-          </div>
-
-          <!-- SessionStorage方式 / Session Storage -->
-          <div class="bg-secondary/10 rounded-lg p-4">
-            <h3 class="text-secondary mb-2 text-lg font-semibold">
-              {m.help_session_storage()}
-            </h3>
-            <p class="text-secondary/70 mb-3 text-sm">
-              {m.help_session_storage_description()}
-            </p>
-            <code class="bg-secondary/20 text-secondary block rounded p-2 text-xs"> sessionStorage.setItem('nluiProp_' + sessionId, JSON.stringify(config)) </code>
-          </div>
-        </div>
-      </div>
-
-      <!-- 示例配置 / Example Configuration -->
-      <div class="bg-base-100 rounded-lg p-6 shadow-lg">
-        <h2 class="text-base-content mb-4 text-2xl font-bold">
-          {m.help_example_title()}
-        </h2>
-
-        <div class="bg-base-200 rounded-lg p-4">
-          <pre class="text-base-content overflow-x-auto text-sm"><code>{JSON.stringify(exampleProp, null, 2)}</code></pre>
-        </div>
-
-        <div class="mt-4 flex gap-4">
-          <button class="btn btn-primary" onclick={tryExample}>
-            {m.help_try_example()}
-          </button>
-        </div>
-      </div>
-
-      <!-- Card组件示例 / Card Component Examples -->
-      <div class="bg-base-100 rounded-lg p-6 shadow-lg">
-        <h2 class="text-base-content mb-4 text-2xl font-bold">Card Components</h2>
-        <p class="text-base-content/70 mb-6">Card components are versatile containers for displaying content with optional actions, images, and layouts.</p>
-
-        <div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-          {#each cardExamples as cardData}
-            <Card {...cardData} />
-          {/each}
-        </div>
-
-        <div class="flex gap-4">
-          <button class="btn btn-primary" onclick={tryCardExample}>
-            {m.help_try_example()}
-          </button>
-        </div>
-      </div>
-
-      <!-- Table组件示例 / Table Component Examples -->
-      <div class="bg-base-100 rounded-lg p-6 shadow-lg">
-        <h2 class="text-base-content mb-4 text-2xl font-bold">Table Components</h2>
-        <p class="text-base-content/70 mb-6">Table components provide flexible data display with sorting, actions, and various styling options.</p>
-
-        <!-- 功能丰富的表格 / Feature-rich Table -->
-        <div class="mb-8">
-          <h3 class="mb-4 text-lg font-semibold">Full-Featured Table</h3>
-          <Table {...basicTableData} />
-        </div>
-
-        <!-- 简单表格 / Simple Table -->
-        <div class="mb-8">
-          <h3 class="mb-4 text-lg font-semibold">Simple Table</h3>
-          <Table {...simpleTableData} />
-        </div>
-
-        <div class="flex gap-4">
-          <button class="btn btn-primary" onclick={tryTableExample}>
-            {m.help_try_example()}
-          </button>
-        </div>
-      </div>
-
-      <!-- Form组件示例 / Form Component Examples -->
-      <div class="bg-base-100 rounded-lg p-6 shadow-lg">
-        <h2 class="text-base-content mb-4 text-2xl font-bold">Form Components</h2>
-        <p class="text-base-content/70 mb-6">Form components provide comprehensive input handling with validation, various field types, and user-friendly interfaces for data collection.</p>
-
-        <!-- 功能丰富的表单 / Feature-rich Form -->
-        <div class="mb-8">
-          <h3 class="mb-4 text-lg font-semibold">Registration Form</h3>
-          <div class="max-w-2xl">
-            <Form {...basicFormData} />
-          </div>
-        </div>
-
-        <!-- 简单表单 / Simple Form -->
-        <div class="mb-8">
-          <h3 class="mb-4 text-lg font-semibold">Contact Form</h3>
-          <div class="max-w-lg">
-            <Form {...simpleFormData} />
-          </div>
-        </div>
-
-        <div class="flex gap-4">
-          <button class="btn btn-primary" onclick={tryFormExample}>
-            {m.help_try_example()}
-          </button>
-        </div>
-      </div>
-
-      <!-- Markdown组件示例 / Markdown Component Examples -->
-      <div class="bg-base-100 rounded-lg p-6 shadow-lg">
-        <h2 class="text-base-content mb-4 text-2xl font-bold">Markdown Components</h2>
-        <p class="text-base-content/70 mb-6">Markdown components allow you to render rich text content using Markdown syntax, supporting headers, lists, code blocks, and more.</p>
-
-        <!-- Markdown示例 / Markdown Examples -->
-        <div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {#each markdownExamples as markdownData}
-            <div class="bg-base-200 rounded-lg p-4">
-              <Markdown {...markdownData} />
+    <!-- 使用说明 -->
+    <div class="mx-auto mb-12 max-w-5xl">
+      <div class="card from-info/5 to-primary/5 border-info/20 border bg-gradient-to-r shadow-lg">
+        <div class="card-body p-6">
+          <div class="mb-4 flex items-center gap-3">
+            <div class="bg-info/20 flex h-8 w-8 items-center justify-center rounded-lg">
+              <span class="icon-[lucide--lightbulb] text-info size-5"></span>
             </div>
-          {/each}
-        </div>
+            <h2 class="card-title text-info text-xl">{m.help_usage_title()}</h2>
+          </div>
 
-        <div class="flex gap-4">
-          <button class="btn btn-primary" onclick={tryMarkdownExample}>
-            {m.help_try_example()}
-          </button>
+          <div class="prose text-base-content max-w-none">
+            <p class="text-base-content/80 mb-6 text-base leading-relaxed">{m.help_usage_description()}</p>
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="from-base-100 to-base-200/50 border-base-300/30 rounded-xl border bg-gradient-to-br p-5">
+                <div class="mb-3 flex items-center gap-2">
+                  <span class="icon-[lucide--link] text-primary size-5"></span>
+                  <h3 class="text-base-content text-base font-semibold">{m.help_url_params()}</h3>
+                </div>
+                <p class="text-base-content/70 mb-4 text-sm leading-relaxed">{m.help_url_params_description()}</p>
+                <div class="bg-base-300/20 text-base-content border-base-300/30 rounded-lg border p-3 font-mono text-sm break-all">
+                  ?nlui={'{'}"showTools":true,"block":{'{'}"main":{'{'}"kind":"card"...{'}'}{'}'}{'}'}
+                </div>
+              </div>
+
+              <div class="from-base-100 to-base-200/50 border-base-300/30 rounded-xl border bg-gradient-to-br p-5">
+                <div class="mb-3 flex items-center gap-2">
+                  <span class="icon-[lucide--database] text-secondary size-5"></span>
+                  <h3 class="text-base-content text-base font-semibold">{m.help_session_storage()}</h3>
+                </div>
+                <p class="text-base-content/70 mb-4 text-sm leading-relaxed">{m.help_session_storage_description()}</p>
+                <div class="bg-base-300/20 text-base-content border-base-300/30 rounded-lg border p-3 font-mono text-sm">sessionStorage['nluiProp_sessionId']</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Chart组件 / Chart Component -->
-    <div class="card bg-base-100 mb-8 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title mb-4 text-2xl">
-          <span class="icon-[tabler--chart-line] text-primary h-8 w-8"></span>
-          {m.doc_component_chart_title()}
-        </h2>
-        <p class="text-base-content/70 mb-6">
-          {m.doc_component_chart_description()}
-        </p>
+    <!-- 组件文档 -->
+    <div class="mx-auto max-w-7xl space-y-12">
+      {#each componentSections as section, index}
+        <section id={section.id} class="scroll-mt-24">
+          <div class="card from-base-100/80 to-base-200/30 border-base-300/30 border bg-gradient-to-br shadow-xl backdrop-blur-sm">
+            <div class="card-body p-8">
+              <!-- 组件标题区域 -->
+              <div class="mb-8 flex items-start gap-4">
+                <div class="bg-primary/10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl">
+                  <span class="text-2xl">
+                    {#if section.id === 'card'}📄
+                    {:else if section.id === 'table'}📊
+                    {:else if section.id === 'form'}📝
+                    {:else if section.id === 'chart'}📈
+                    {:else if section.id === 'calendar'}📅
+                    {:else if section.id === 'timeline'}📋
+                    {:else if section.id === 'gallery'}🖼️
+                    {:else if section.id === 'markdown'}📄
+                    {:else if section.id === 'image'}🖼️
+                    {:else if section.id === 'video'}🎥
+                    {:else if section.id === 'audio'}🎵
+                    {:else}🔧{/if}
+                  </span>
+                </div>
+                <div class="flex-1">
+                  <h2 class="text-primary mb-2 text-3xl font-bold">
+                    {section.title}
+                  </h2>
+                  <p class="text-base-content/80 text-lg leading-relaxed">{section.description}</p>
+                </div>
+              </div>
 
-        <!-- Chart示例 / Chart Examples -->
-        <div class="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
-          {#each chartExamples as chartData}
-            <div class="bg-base-200 rounded-lg p-4">
-              <Chart {...chartData} />
+              <!-- 实时组件预览 -->
+              <div class="mb-8">
+                <div class="mb-6 flex items-center gap-2">
+                  <span class="icon-[lucide--eye] text-success size-5"></span>
+                  <h3 class="text-base-content text-lg font-semibold">实时预览</h3>
+                  <div class="badge badge-success badge-sm">
+                    {Math.min(3, section.examples.length)} 个预览
+                  </div>
+                </div>
+
+                <!-- 多个实时预览 -->
+                <div class="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+                  {#each section.examples.slice(0, 3) as example, idx}
+                    <div class="border-base-300/30 bg-base-100/50 overflow-hidden rounded-xl border">
+                      <div class="bg-base-200/30 text-base-content/80 border-base-300/30 border-b px-4 py-2 text-sm font-medium">
+                        {example.title || `示例 ${idx + 1}`}
+                      </div>
+                      <div class="p-4">
+                        {#if section.id === 'table'}
+                          <!-- 表格组件特殊处理 -->
+                          <div class="overflow-x-auto">
+                            <!-- @ts-ignore -->
+                            <svelte:component this={section.component} {...example} />
+                          </div>
+                        {:else if section.id === 'timeline'}
+                          <!-- 时间轴组件限制宽度 -->
+                          <div class="mx-auto max-w-md">
+                            <!-- @ts-ignore -->
+                            <svelte:component this={section.component} {...example} />
+                          </div>
+                        {:else}
+                          <!-- 其他组件正常显示 -->
+                          <!-- @ts-ignore -->
+                          <svelte:component this={section.component} {...example} />
+                        {/if}
+                      </div>
+                    </div>
+                  {/each}
+                </div>
+              </div>
+
+              <!-- 示例展示区域 -->
+              <div>
+                <div class="mb-6 flex items-center gap-2">
+                  <span class="icon-[lucide--layers] text-accent size-5"></span>
+                  <h3 class="text-base-content text-lg font-semibold">示例展示</h3>
+                  <div class="badge badge-primary badge-sm">{section.examples.length} 个示例</div>
+                </div>
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {#each section.examples as example}
+                    <ExampleCard {example} componentName={section.id} />
+                  {/each}
+                </div>
+              </div>
             </div>
-          {/each}
-        </div>
-
-        <div class="flex gap-4">
-          <button class="btn btn-primary" onclick={tryChartExample}>
-            {m.help_try_example()}
-          </button>
-        </div>
-      </div>
+          </div>
+        </section>
+      {/each}
     </div>
 
-    <!-- Calendar组件 / Calendar Component -->
-    <div class="card bg-base-100 mb-8 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title mb-4 text-2xl">
-          <span class="icon-[tabler--calendar] text-primary h-8 w-8"></span>
-          {m.doc_component_calendar_title()}
-        </h2>
-        <p class="text-base-content/70 mb-6">
-          {m.doc_component_calendar_description()}
-        </p>
-
-        <!-- Calendar示例 / Calendar Examples -->
-        <div class="mb-8 grid grid-cols-1 gap-6">
-          {#each calendarExamples as calendarData}
-            <div class="bg-base-200 rounded-lg p-4">
-              <Calendar {...calendarData} />
-            </div>
-          {/each}
-        </div>
-
-        <div class="flex gap-4">
-          <button class="btn btn-primary" onclick={tryCalendarExample}>
-            {m.help_try_example()}
-          </button>
-        </div>
+    <!-- 页脚信息 -->
+    <div class="border-base-300/30 mt-16 border-t pt-8 text-center">
+      <div class="text-base-content/60 mb-2 flex items-center justify-center gap-2">
+        <span class="icon-[lucide--heart] size-4"></span>
+        <p class="text-sm">NLUI MCP - Natural Language User Interface Framework</p>
       </div>
-    </div>
-
-    <!-- Timeline组件 / Timeline Component -->
-    <div class="card bg-base-100 mb-8 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title mb-4 text-2xl">
-          <span class="icon-[tabler--timeline] text-primary h-8 w-8"></span>
-          Timeline Components
-        </h2>
-        <p class="text-base-content/70 mb-6">Timeline components visualize events in chronological order with FlyonUI timeline styles.</p>
-
-        <!-- Timeline示例 / Timeline Examples -->
-        <div class="mb-8 grid grid-cols-1 gap-6">
-          {#each timelineExamples as t}
-            <div class="bg-base-200 rounded-lg p-4">
-              <Timeline {...t} />
-            </div>
-          {/each}
-        </div>
-
-        <div class="flex gap-4">
-          <button class="btn btn-primary" onclick={tryTimelineExample}>
-            {m.help_try_example()}
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Gallery组件 / Gallery Component -->
-    <div class="card bg-base-100 mb-8 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title mb-4 text-2xl">
-          <span class="icon-[tabler--photo] text-primary h-8 w-8"></span>
-          {m.doc_component_gallery_title()}
-        </h2>
-        <p class="text-base-content/70 mb-6">{m.doc_component_gallery_description()}</p>
-
-        <!-- Gallery示例 / Gallery Examples -->
-        <div class="mb-8 grid grid-cols-1 gap-6">
-          {#each galleryExamples as gallery}
-            <div class="bg-base-200 rounded-lg p-4">
-              <Gallery {...gallery} />
-            </div>
-          {/each}
-        </div>
-
-        <div class="flex gap-4">
-          <button class="btn btn-primary" onclick={tryGalleryExample}>
-            {m.help_try_example()}
-          </button>
-        </div>
-      </div>
+      <p class="text-base-content/40 text-xs">为现代Web应用提供智能UI组件解决方案</p>
     </div>
   </div>
 </div>
