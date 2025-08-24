@@ -1,5 +1,7 @@
 <script lang="ts">
   import ExampleCard from './components/ExampleCard.svelte';
+  import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
+  import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
   import * as m from '../../paraglide/messages';
 
   // 导入所有组件
@@ -113,13 +115,22 @@
   <!-- 固定在顶部的组件导航 -->
   <div class="bg-base-100/95 border-base-300/50 fixed top-0 right-0 left-0 z-10 border-b shadow-sm backdrop-blur-md">
     <div class="container mx-auto px-4 py-3">
-      <nav class="flex flex-wrap justify-center gap-2">
-        {#each componentSections as section}
-          <a href="#{section.id}" class="btn btn-sm btn-ghost hover:btn-primary text-xs transition-all duration-200">
-            {section.title}
-          </a>
-        {/each}
-      </nav>
+      <div class="flex items-center justify-between">
+        <!-- 组件导航链接 -->
+        <nav class="flex flex-1 flex-wrap justify-center gap-2">
+          {#each componentSections as section}
+            <a href="#{section.id}" class="btn btn-sm btn-ghost hover:btn-primary text-xs transition-all duration-200">
+              {section.title}
+            </a>
+          {/each}
+        </nav>
+
+        <!-- 右侧控制区域 -->
+        <div class="ml-4 flex items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeSwitcher />
+        </div>
+      </div>
     </div>
   </div>
 
