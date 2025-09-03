@@ -35,10 +35,21 @@
   let iframeHeights = $state<Record<number, number>>({});
 
   // 对话区域引用，用于自动滚动
-  let messagesContainer: HTMLDivElement;
+  let messagesContainer = $state<HTMLDivElement>();
 
   // 示例用户查询 - 分类组织
   const exampleCategories = [
+    {
+      title: '布局系统',
+      icon: '🏗️',
+      examples: [
+        '展示企业管理系统，包含员工信息、销售数据、项目进展和系统状态',
+        '创建人力资源仪表板，显示招聘进度、员工考勤、绩效评估和培训计划',
+        '生成财务管理界面，展示收支报表、预算分析、成本控制和资金流向',
+        '设计客户服务平台，包含工单处理、客户信息、服务记录和满意度调查',
+        '构建电商运营中心，显示商品管理、订单处理、库存状态和营销数据'
+      ]
+    },
     {
       title: '数据展示',
       icon: '📊',
@@ -72,7 +83,7 @@
     }
   ];
 
-  let selectedCategory = $state('数据展示');
+  let selectedCategory = $state('布局系统');
   let currentExamples = $derived(exampleCategories.find((cat) => cat.title === selectedCategory)?.examples || []);
 
   // 更新会话信息
@@ -89,7 +100,9 @@
   function scrollToBottom() {
     if (messagesContainer) {
       setTimeout(() => {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        if (messagesContainer) {
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
       }, 100);
     }
   }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as m from '../../paraglide/messages';
   import type { NLUIBlock, NLUIComponent, NLUIProps } from '../ui/nluiProps.types';
-  import ComponentRenderer from './ComponentRenderer.svelte';
+  import BlockRenderer from './BlockRenderer.svelte';
   import RenderError from './RenderError.svelte';
 
   interface Props {
@@ -36,65 +36,8 @@
     </div>
   {:else}
     <!-- 主布局 / Main Layout -->
-    <div class="flex flex-1 flex-col overflow-hidden">
-      <!-- Header -->
-      {#if nluiProp.block.header}
-        <div class="bg-base-100 border-base-300 flex-shrink-0 border-b p-4">
-          {#if isComponent(nluiProp.block.header)}
-            <ComponentRenderer component={nluiProp.block.header} />
-          {:else}
-            <!-- Nested block rendering would go here -->
-            <div class="text-base-content text-center">嵌套布局块暂未实现 / Nested blocks not yet implemented</div>
-          {/if}
-        </div>
-      {/if}
-
-      <!-- Main Content Area with Sidebars -->
-      <div class="flex flex-1 overflow-hidden">
-        <!-- Left Sidebar -->
-        {#if nluiProp.block.left}
-          <div class="bg-base-100 border-base-300 w-64 flex-shrink-0 border-r p-4">
-            {#if isComponent(nluiProp.block.left)}
-              <ComponentRenderer component={nluiProp.block.left} />
-            {:else}
-              <div class="text-base-content text-center">嵌套布局块暂未实现 / Nested blocks not yet implemented</div>
-            {/if}
-          </div>
-        {/if}
-
-        <!-- Main Content -->
-        <div class="flex flex-1 items-center justify-center overflow-auto p-4">
-          {#if isComponent(nluiProp.block.main)}
-            <div class="h-full w-full">
-              <ComponentRenderer component={nluiProp.block.main} />
-            </div>
-          {:else}
-            <div class="text-base-content text-center">嵌套布局块暂未实现 / Nested blocks not yet implemented</div>
-          {/if}
-        </div>
-
-        <!-- Right Sidebar -->
-        {#if nluiProp.block.right}
-          <div class="bg-base-100 border-base-300 w-64 flex-shrink-0 border-l p-4">
-            {#if isComponent(nluiProp.block.right)}
-              <ComponentRenderer component={nluiProp.block.right} />
-            {:else}
-              <div class="text-base-content text-center">嵌套布局块暂未实现 / Nested blocks not yet implemented</div>
-            {/if}
-          </div>
-        {/if}
-      </div>
-
-      <!-- Footer -->
-      {#if nluiProp.block.footer}
-        <div class="bg-base-100 border-base-300 flex-shrink-0 border-t p-4">
-          {#if isComponent(nluiProp.block.footer)}
-            <ComponentRenderer component={nluiProp.block.footer} />
-          {:else}
-            <div class="text-base-content text-center">嵌套布局块暂未实现 / Nested blocks not yet implemented</div>
-          {/if}
-        </div>
-      {/if}
+    <div class="flex-1">
+      <BlockRenderer block={nluiProp.block} isRoot={true} />
     </div>
   {/if}
 
@@ -115,8 +58,7 @@
                   if (details instanceof HTMLDetailsElement) {
                     details.open = !details.open;
                   }
-                }}
-              >
+                }}>
                 <span class="icon-[lucide--bug] size-2.5"></span>
                 <span class="hidden text-[10px] sm:inline">Debug</span>
               </button>

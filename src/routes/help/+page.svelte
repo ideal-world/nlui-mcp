@@ -1,5 +1,6 @@
 <script lang="ts">
   import ExampleCard from './components/ExampleCard.svelte';
+  import LayoutExampleCard from './components/LayoutExampleCard.svelte';
   import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
   import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
   import * as m from '../../paraglide/messages';
@@ -29,6 +30,7 @@
   import { getImageExamples } from './examples/imageExamples';
   import { getVideoExamples } from './examples/videoExamples';
   import { getAudioExamples } from './examples/audioExamples';
+  import { getLayoutExamples } from './examples/layoutExamples';
 
   const componentSections = [
     {
@@ -118,6 +120,10 @@
       <div class="flex items-center justify-between">
         <!-- 组件导航链接 -->
         <nav class="flex flex-1 flex-wrap justify-center gap-2">
+          <!-- 布局系统链接 -->
+          <a href="#layout" class="btn btn-sm btn-primary hover:btn-primary-focus text-xs transition-all duration-200">
+            {m.doc_layout_title()}
+          </a>
           {#each componentSections as section}
             <a href="#{section.id}" class="btn btn-sm btn-ghost hover:btn-primary text-xs transition-all duration-200">
               {section.title}
@@ -188,6 +194,59 @@
       </div>
     </div>
 
+    <!-- 布局系统 -->
+    <div class="mx-auto mb-12 max-w-7xl">
+      <section id="layout" class="scroll-mt-24">
+        <div class="card from-base-100/80 to-base-200/30 border-base-300/30 border bg-gradient-to-br shadow-xl backdrop-blur-sm">
+          <div class="card-body p-8">
+            <!-- 布局标题区域 -->
+            <div class="mb-8 flex items-start gap-4">
+              <div class="bg-primary/20 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl">
+                <span class="icon-[lucide--layout-dashboard] text-primary size-8"></span>
+              </div>
+              <div class="flex-1">
+                <h2 class="text-primary mb-3 text-3xl font-bold">{m.doc_layout_title()}</h2>
+                <p class="text-base-content/70 text-lg leading-relaxed">
+                  {m.doc_layout_description()}
+                </p>
+              </div>
+            </div>
+
+            <!-- 布局特性说明 -->
+            <div class="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <div class="bg-success/10 border-success/20 text-success rounded-lg border p-4 text-center">
+                <span class="icon-[lucide--grid-3x3] mx-auto mb-2 block size-8"></span>
+                <h3 class="font-semibold">{m.layout_feature_5_areas()}</h3>
+                <p class="mt-1 text-xs opacity-80">{m.layout_feature_5_areas_desc()}</p>
+              </div>
+              <div class="bg-info/10 border-info/20 text-info rounded-lg border p-4 text-center">
+                <span class="icon-[lucide--layers] mx-auto mb-2 block size-8"></span>
+                <h3 class="font-semibold">{m.layout_feature_nesting()}</h3>
+                <p class="mt-1 text-xs opacity-80">{m.layout_feature_nesting_desc()}</p>
+              </div>
+              <div class="bg-warning/10 border-warning/20 text-warning rounded-lg border p-4 text-center">
+                <span class="icon-[lucide--smartphone] mx-auto mb-2 block size-8"></span>
+                <h3 class="font-semibold">{m.layout_feature_responsive()}</h3>
+                <p class="mt-1 text-xs opacity-80">{m.layout_feature_responsive_desc()}</p>
+              </div>
+              <div class="bg-secondary/10 border-secondary/20 text-secondary rounded-lg border p-4 text-center">
+                <span class="icon-[lucide--zap] mx-auto mb-2 block size-8"></span>
+                <h3 class="font-semibold">{m.layout_feature_performance()}</h3>
+                <p class="mt-1 text-xs opacity-80">{m.layout_feature_performance_desc()}</p>
+              </div>
+            </div>
+
+            <!-- 布局示例 -->
+            <div class="space-y-8">
+              {#each getLayoutExamples() as example}
+                <LayoutExampleCard example={example.config} title={example.title} description={example.description} />
+              {/each}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <!-- 组件文档 -->
     <div class="mx-auto max-w-7xl space-y-12">
       {#each componentSections as section, index}
@@ -235,7 +294,7 @@
                   {#each section.examples.slice(0, 3) as example, idx}
                     <div class="border-base-300/30 bg-base-100/50 overflow-hidden rounded-xl border">
                       <div class="bg-base-200/30 text-base-content/80 border-base-300/30 border-b px-4 py-2 text-sm font-medium">
-                        {example.title || `示例 ${idx + 1}`}
+                        {example.title || `${m.example_number()} ${idx + 1}`}
                       </div>
                       <div class="p-4">
                         {#if section.id === 'table'}
@@ -262,8 +321,8 @@
               <div>
                 <div class="mb-6 flex items-center gap-2">
                   <span class="icon-[lucide--layers] text-accent size-5"></span>
-                  <h3 class="text-base-content text-lg font-semibold">示例展示</h3>
-                  <div class="badge badge-primary badge-sm">{section.examples.length} 个示例</div>
+                  <h3 class="text-base-content text-lg font-semibold">{m.example_display()}</h3>
+                  <div class="badge badge-primary badge-sm">{section.examples.length} {m.examples_count()}</div>
                 </div>
                 <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {#each section.examples as example}
