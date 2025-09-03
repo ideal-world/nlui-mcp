@@ -241,19 +241,16 @@
                         {#if section.id === 'table'}
                           <!-- 表格组件特殊处理 -->
                           <div class="overflow-x-auto">
-                            <!-- @ts-ignore -->
-                            <svelte:component this={section.component} {...example} />
+                            <svelte:component this={section.component} {...example as any} />
                           </div>
                         {:else if section.id === 'timeline'}
                           <!-- 时间轴组件限制宽度 -->
                           <div class="mx-auto max-w-md">
-                            <!-- @ts-ignore -->
-                            <svelte:component this={section.component} {...example} />
+                            <svelte:component this={section.component} {...example as any} />
                           </div>
                         {:else}
                           <!-- 其他组件正常显示 -->
-                          <!-- @ts-ignore -->
-                          <svelte:component this={section.component} {...example} />
+                          <svelte:component this={section.component} {...example as any} />
                         {/if}
                       </div>
                     </div>
