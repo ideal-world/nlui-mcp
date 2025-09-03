@@ -4,6 +4,7 @@
  */
 
 import { mcpClient } from './mcpClient';
+import { logger } from '$lib/utils/logger';
 
 // OpenAI API标准接口定义
 interface OpenAIMessage {
@@ -104,7 +105,11 @@ function convertMCPToolToOpenAI(mcpTool: any): OpenAITool {
  * 初始化会话 - 加载系统提示词和工具
  */
 async function initializeSession(session: ConversationSession, language = 'zh'): Promise<void> {
-  console.log('🚀 初始化会话:', session.id);
+  logger.info('Session initialized', {
+    component: 'ConversationService',
+    action: 'initializeSession',
+    metadata: { sessionId: session.id }
+  });
 
   // 1. 获取init-session系统提示词
   if (!session.systemPromptLoaded) {
@@ -115,7 +120,11 @@ async function initializeSession(session: ConversationSession, language = 'zh'):
         content: systemPrompt
       });
       session.systemPromptLoaded = true;
-      console.log('✅ 系统提示词已加载，长度:', systemPrompt.length, '字符');
+      logger.info('System prompt loaded', {
+        component: 'ConversationService',
+        action: 'loadSystemPrompt',
+        metadata: { length: systemPrompt.length }
+      });
     } catch (error) {
       console.error('❌ 系统提示词加载失败:', error);
       throw new Error('Failed to load system prompt');
@@ -128,7 +137,11 @@ async function initializeSession(session: ConversationSession, language = 'zh'):
       const mcpTools = await mcpClient.listTools();
       session.tools = mcpTools.map(convertMCPToolToOpenAI);
       session.toolsLoaded = true;
-      console.log('✅ 工具列表已加载，工具数量:', session.tools.length);
+      logger.info('Tools loaded', {
+        component: 'ConversationService',
+        action: 'loadTools',
+        metadata: { toolCount: session.tools.length }
+      });
     } catch (error) {
       console.error('❌ 工具列表加载失败:', error);
       throw new Error('Failed to load tools');
@@ -206,12 +219,20 @@ async function handleToolCalls(session: ConversationSession, assistantMessage: O
   // 执行所有工具调用
   for (const toolCall of assistantMessage.tool_calls) {
     try {
-      console.log('🔧 执行工具调用:', toolCall);
+      logger.info('Executing tool call', {
+        component: 'ConversationService',
+        action: 'executeToolCall',
+        metadata: { toolName: toolCall.function.name }
+      });
 
       const args = JSON.parse(toolCall.function.arguments);
       const result = await mcpClient.callTool(toolCall.function.name, args);
 
-      console.log('✅ 工具调用成功:', result);
+      logger.info('Tool call successful', {
+        component: 'ConversationService',
+        action: 'executeToolCall',
+        metadata: { toolName: toolCall.function.name, success: true }
+      });
 
       // 添加工具响应消息（简化内容，只保留必要信息）
       const toolMessage: OpenAIMessage = {
@@ -225,7 +246,11 @@ async function handleToolCalls(session: ConversationSession, assistantMessage: O
       // 如果是ui-render工具，提取UI配置和URL
       if (toolCall.function.name === 'ui-render' && result.content?.[0]?.resource?.uri) {
         uiUrl = result.content?.[0]?.resource?.uri || '';
-        console.log('🎨 UI组件已生成，URL:', uiUrl);
+        logger.info('UI component generated', {
+          component: 'ConversationService',
+          action: 'generateUI',
+          metadata: { uiUrl }
+        });
       }
     } catch (error) {
       // 添加错误消息
@@ -260,8 +285,11 @@ export async function processConversationClient(
     finishReason: string;
   };
 }> {
-  console.log('🤖 开始处理对话');
-  console.log('📝 用户输入:', userMessage);
+  logger.info('Processing conversation started', {
+    component: 'ConversationService',
+    action: 'processConversation',
+    metadata: { sessionId, language }
+  });
 
   // 获取或创建会话
   const session = getOrCreateSession(sessionId);
@@ -277,19 +305,25 @@ export async function processConversationClient(
   session.messages.push(userMsg);
 
   try {
-    console.log('� 会话消息数量:', session.messages.length);
-    console.log('�️  可用工具数量:', session.tools.length);
+    logger.info('Session status', {
+      component: 'ConversationService',
+      action: 'checkSessionStatus',
+      metadata: {
+        messageCount: session.messages.length,
+        toolCount: session.tools.length
+      }
+    });
 
     const startTime = Date.now();
-    console.log('⏳ ==============\n消息体:\n', JSON.stringify(session.messages, null, 2));
-    console.log('⏳ ==============\t工具集:\n', JSON.stringify(session.tools, null, 2));
     const result = await callOpenAI(session.messages, session.tools);
-    console.log('⏳ ==============\n响应体:\n', JSON.stringify(result, null, 2));
     const endTime = Date.now();
     const responseTime = endTime - startTime;
 
-    console.log('✅ OpenAI API调用成功');
-    console.log('⏱️  响应时间:', responseTime, 'ms');
+    logger.info('OpenAI API call successful', {
+      component: 'ConversationService',
+      action: 'callOpenAI',
+      metadata: { responseTime }
+    });
 
     const choice = result.choices[0];
     const assistantMessage = choice.message;
@@ -297,7 +331,11 @@ export async function processConversationClient(
 
     // 检查是否有工具调用
     if (choice.finish_reason === 'tool_calls' && assistantMessage.tool_calls) {
-      console.log('🔧 检测到工具调用，数量:', assistantMessage.tool_calls.length);
+      logger.info('Tool calls detected', {
+        component: 'ConversationService',
+        action: 'detectToolCalls',
+        metadata: { toolCallCount: assistantMessage.tool_calls.length }
+      });
 
       const toolResults = await handleToolCalls(session, assistantMessage);
       uiUrl = toolResults.uiUrl;
@@ -330,7 +368,11 @@ export async function processConversationClient(
       }
     };
   } catch (error) {
-    console.error('❌ 对话处理失败:', error);
+    logger.error('Conversation processing failed', {
+      component: 'ConversationService',
+      action: 'processConversation',
+      metadata: { sessionId, error: error instanceof Error ? error.message : 'Unknown error' }
+    });
     throw error;
   }
 }
@@ -340,7 +382,11 @@ export async function processConversationClient(
  */
 export function resetSessionClient(sessionId: string): void {
   sessions.delete(sessionId);
-  console.log('🔄 会话已重置:', sessionId);
+  logger.info('Session reset', {
+    component: 'ConversationService',
+    action: 'resetSession',
+    metadata: { sessionId }
+  });
 }
 
 /**

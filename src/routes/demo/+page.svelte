@@ -128,8 +128,6 @@
     scrollToBottom();
 
     try {
-      console.log('🚀 开始AI对话请求（客户端）');
-      console.log('📝 用户输入:', query);
       console.log('🆔 会话ID:', currentSessionId);
 
       // 使用客户端对话服务处理消息

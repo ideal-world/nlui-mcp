@@ -1,10 +1,11 @@
 import type { NLUIProps } from '../../../lib/ui/nluiProps.types';
+import * as m from '../../../paraglide/messages';
 
 export function getLayoutExamples(): { title: string; description: string; config: NLUIProps; preview?: boolean }[] {
   return [
     {
-      title: '完整企业布局',
-      description: '展示包含 header、footer、left、right、main 五个区域的完整布局结构',
+      title: m.layout_complete_enterprise_title(),
+      description: m.layout_complete_enterprise_description(),
       config: {
         block: {
           header: {
@@ -63,8 +64,8 @@ export function getLayoutExamples(): { title: string; description: string; confi
       preview: true
     },
     {
-      title: '嵌套布局结构',
-      description: '演示 main 区域内可以再次包含完整的布局结构',
+      title: m.layout_nested_structure_title(),
+      description: m.layout_nested_structure_description(),
       config: {
         block: {
           header: {
@@ -147,8 +148,8 @@ export function getLayoutExamples(): { title: string; description: string; confi
       preview: true
     },
     {
-      title: '简单三栏布局',
-      description: '包含左侧导航、主内容区和右侧工具栏的常见布局',
+      title: m.layout_simple_three_column_title(),
+      description: m.layout_simple_three_column_description(),
       config: {
         block: {
           left: {
@@ -181,8 +182,8 @@ export function getLayoutExamples(): { title: string; description: string; confi
       }
     },
     {
-      title: '头部导航布局',
-      description: '包含顶部导航和主内容区的简洁布局',
+      title: m.layout_header_navigation_title(),
+      description: m.layout_header_navigation_description(),
       config: {
         block: {
           header: {

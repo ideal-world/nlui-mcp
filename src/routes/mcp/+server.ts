@@ -42,7 +42,6 @@ export async function POST({ request }: { request: Request }) {
 
 // SSE notifications not supported in stateless mode
 export async function GET() {
-  console.log('Received GET MCP request');
   return json(
     {
       jsonrpc: '2.0',
@@ -58,7 +57,6 @@ export async function GET() {
 
 // Session termination not needed in stateless mode
 export async function DELETE() {
-  console.log('Received DELETE MCP request');
   return json(
     {
       jsonrpc: '2.0',

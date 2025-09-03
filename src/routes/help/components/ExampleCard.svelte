@@ -62,7 +62,7 @@
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="icon-[lucide--code] size-4"></span>
-              <span class="font-medium">查看配置参数</span>
+              <span class="font-medium">{m.view_config_params()}</span>
             </div>
             <span class="icon-[lucide--chevron-down] size-4 transition-transform duration-200 group-open:rotate-180"></span>
           </div>

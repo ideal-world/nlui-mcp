@@ -1,15 +1,21 @@
 import type { NLUITableComponentProps } from '$lib/ui/components/table.types';
+import * as m from '../../../paraglide/messages';
 
+/**
+ * 表格示例数据生成器
+ * Table examples data generator
+ */
 export function getTableExamples(): NLUITableComponentProps[] {
   return [
+    // 员工目录示例 / Employee Directory Example
     {
-      title: 'Employee Directory',
+      title: m.example_employee_directory(),
       columns: [
-        { key: 'name', title: 'Name' },
-        { key: 'position', title: 'Position' },
-        { key: 'department', title: 'Department' },
-        { key: 'email', title: 'Email' },
-        { key: 'startDate', title: 'Start Date' }
+        { key: 'name', title: m.example_employee_name() },
+        { key: 'position', title: m.example_employee_position() },
+        { key: 'department', title: m.example_employee_department() },
+        { key: 'email', title: m.example_employee_email() },
+        { key: 'startDate', title: m.example_employee_start_date() }
       ],
       rows: [
         {
@@ -51,76 +57,270 @@ export function getTableExamples(): NLUITableComponentProps[] {
             email: 'david@company.com',
             startDate: '2022-11-03'
           }
+        },
+        {
+          id: '5',
+          data: {
+            name: 'Eva Martinez',
+            position: 'Data Scientist',
+            department: 'Analytics',
+            email: 'eva@company.com',
+            startDate: '2023-06-12'
+          }
         }
       ],
       searchable: true,
       pageSize: 10
     },
+
+    // 销售报告示例 / Sales Report Example
     {
-      title: 'Sales Report',
+      title: m.example_sales_report(),
       columns: [
-        { key: 'month', title: 'Month' },
-        { key: 'revenue', title: 'Revenue ($)' },
-        { key: 'growth', title: 'Growth (%)' },
-        { key: 'orders', title: 'Orders' }
+        { key: 'month', title: m.example_sales_month() },
+        { key: 'revenue', title: m.example_sales_revenue() },
+        { key: 'growth', title: m.example_sales_growth() },
+        { key: 'orders', title: m.example_sales_orders() }
       ],
       rows: [
-        { id: '1', data: { month: 'January', revenue: '$45,230', growth: '+12.5%', orders: '342' } },
-        { id: '2', data: { month: 'February', revenue: '$52,100', growth: '+15.2%', orders: '389' } },
-        { id: '3', data: { month: 'March', revenue: '$48,750', growth: '-6.4%', orders: '371' } },
-        { id: '4', data: { month: 'April', revenue: '$61,440', growth: '+26.0%', orders: '445' } }
-      ]
-    },
-    {
-      title: '产品库存管理',
-      columns: [
-        { key: 'name', title: '产品名称' },
-        { key: 'sku', title: 'SKU编码' },
-        { key: 'category', title: '分类' },
-        { key: 'stock', title: '库存' },
-        { key: 'price', title: '单价' },
-        { key: 'status', title: '状态' }
-      ],
-      rows: [
-        { id: '1', data: { name: 'iPhone 15 Pro', sku: 'IP15P-128', category: '手机', stock: '45', price: '¥8,999', status: '正常' } },
-        { id: '2', data: { name: 'MacBook Air M2', sku: 'MBA-M2-256', category: '笔记本', stock: '12', price: '¥9,499', status: '库存不足' } },
-        { id: '3', data: { name: 'AirPods Pro', sku: 'APP-GEN2', category: '耳机', stock: '78', price: '¥1,899', status: '正常' } },
-        { id: '4', data: { name: 'iPad Air', sku: 'IPA-11-64', category: '平板', stock: '0', price: '¥4,699', status: '缺货' } },
-        { id: '5', data: { name: 'Apple Watch S9', sku: 'AWS9-41', category: '手表', stock: '23', price: '¥2,999', status: '正常' } }
+        {
+          id: '1',
+          data: {
+            month: 'January',
+            revenue: '$45,230',
+            growth: '+12.5%',
+            orders: '342'
+          }
+        },
+        {
+          id: '2',
+          data: {
+            month: 'February',
+            revenue: '$52,100',
+            growth: '+15.2%',
+            orders: '389'
+          }
+        },
+        {
+          id: '3',
+          data: {
+            month: 'March',
+            revenue: '$48,750',
+            growth: '-6.4%',
+            orders: '371'
+          }
+        },
+        {
+          id: '4',
+          data: {
+            month: 'April',
+            revenue: '$61,440',
+            growth: '+26.0%',
+            orders: '445'
+          }
+        },
+        {
+          id: '5',
+          data: {
+            month: 'May',
+            revenue: '$58,920',
+            growth: '-4.1%',
+            orders: '423'
+          }
+        },
+        {
+          id: '6',
+          data: {
+            month: 'June',
+            revenue: '$67,340',
+            growth: '+14.3%',
+            orders: '498'
+          }
+        }
       ],
       searchable: true,
       pageSize: 5
     },
+
+    // 产品库存管理示例 / Product Inventory Management Example
     {
-      title: '用户反馈统计',
+      title: m.example_product_inventory(),
       columns: [
-        { key: 'date', title: '日期' },
-        { key: 'category', title: '反馈类别' },
-        { key: 'rating', title: '满意度' },
-        { key: 'count', title: '反馈数量' },
-        { key: 'response', title: '响应率' }
+        { key: 'name', title: m.example_product_name() },
+        { key: 'sku', title: m.example_product_sku() },
+        { key: 'category', title: m.example_product_category() },
+        { key: 'stock', title: m.example_product_stock() },
+        { key: 'price', title: m.example_product_price() },
+        { key: 'status', title: m.example_product_status() }
       ],
       rows: [
-        { id: '1', data: { date: '2024-03-15', category: '功能建议', rating: '★★★★☆', count: '156', response: '85%' } },
-        { id: '2', data: { date: '2024-03-14', category: '使用问题', rating: '★★★☆☆', count: '89', response: '92%' } },
-        { id: '3', data: { date: '2024-03-13', category: '界面优化', rating: '★★★★★', count: '203', response: '78%' } },
-        { id: '4', data: { date: '2024-03-12', category: '性能问题', rating: '★★☆☆☆', count: '67', response: '95%' } }
-      ]
+        {
+          id: '1',
+          data: {
+            name: 'iPhone 15 Pro',
+            sku: 'IP15P-128',
+            category: 'Smartphone',
+            stock: '45',
+            price: '$999',
+            status: 'In Stock'
+          }
+        },
+        {
+          id: '2',
+          data: {
+            name: 'MacBook Air M2',
+            sku: 'MBA-M2-256',
+            category: 'Laptop',
+            stock: '12',
+            price: '$1,199',
+            status: 'Low Stock'
+          }
+        },
+        {
+          id: '3',
+          data: {
+            name: 'AirPods Pro',
+            sku: 'APP-GEN2',
+            category: 'Audio',
+            stock: '78',
+            price: '$249',
+            status: 'In Stock'
+          }
+        },
+        {
+          id: '4',
+          data: {
+            name: 'iPad Air',
+            sku: 'IPA-11-64',
+            category: 'Tablet',
+            stock: '0',
+            price: '$599',
+            status: 'Out of Stock'
+          }
+        },
+        {
+          id: '5',
+          data: {
+            name: 'Apple Watch S9',
+            sku: 'AWS9-41',
+            category: 'Wearable',
+            stock: '23',
+            price: '$399',
+            status: 'In Stock'
+          }
+        }
+      ],
+      searchable: true,
+      pageSize: 5
     },
+
+    // 用户反馈统计示例 / User Feedback Statistics Example
     {
-      title: '项目进度跟踪',
+      title: m.example_feedback_statistics(),
       columns: [
-        { key: 'project', title: '项目名称' },
-        { key: 'manager', title: '项目经理' },
-        { key: 'progress', title: '进度' },
-        { key: 'deadline', title: '截止日期' },
-        { key: 'priority', title: '优先级' }
+        { key: 'date', title: m.example_feedback_date() },
+        { key: 'category', title: m.example_feedback_category() },
+        { key: 'rating', title: m.example_feedback_rating() },
+        { key: 'count', title: m.example_feedback_count() },
+        { key: 'response', title: m.example_feedback_response() }
       ],
       rows: [
-        { id: '1', data: { project: '移动端应用重构', manager: '张三', progress: '85%', deadline: '2024-04-15', priority: '高' } },
-        { id: '2', data: { project: '数据分析平台', manager: '李四', progress: '45%', deadline: '2024-05-30', priority: '中' } },
-        { id: '3', data: { project: '用户体验优化', manager: '王五', progress: '92%', deadline: '2024-03-25', priority: '高' } },
-        { id: '4', data: { project: '后台管理系统', manager: '赵六', progress: '15%', deadline: '2024-06-20', priority: '低' } }
+        {
+          id: '1',
+          data: {
+            date: '2024-03-15',
+            category: 'Feature Request',
+            rating: '★★★★☆',
+            count: '156',
+            response: '85%'
+          }
+        },
+        {
+          id: '2',
+          data: {
+            date: '2024-03-14',
+            category: 'Usage Issue',
+            rating: '★★★☆☆',
+            count: '89',
+            response: '92%'
+          }
+        },
+        {
+          id: '3',
+          data: {
+            date: '2024-03-13',
+            category: 'UI Improvement',
+            rating: '★★★★★',
+            count: '203',
+            response: '78%'
+          }
+        },
+        {
+          id: '4',
+          data: {
+            date: '2024-03-12',
+            category: 'Performance',
+            rating: '★★☆☆☆',
+            count: '67',
+            response: '95%'
+          }
+        }
+      ],
+      searchable: true,
+      pageSize: 8
+    },
+
+    // 项目进度跟踪示例 / Project Progress Tracking Example
+    {
+      title: m.example_project_tracking(),
+      columns: [
+        { key: 'project', title: m.example_project_name() },
+        { key: 'manager', title: m.example_project_manager() },
+        { key: 'progress', title: m.example_project_progress() },
+        { key: 'deadline', title: m.example_project_deadline() },
+        { key: 'priority', title: m.example_project_priority() }
+      ],
+      rows: [
+        {
+          id: '1',
+          data: {
+            project: 'Mobile App Refactor',
+            manager: 'John Smith',
+            progress: '85%',
+            deadline: '2024-04-15',
+            priority: 'High'
+          }
+        },
+        {
+          id: '2',
+          data: {
+            project: 'Data Analytics Platform',
+            manager: 'Sarah Jones',
+            progress: '45%',
+            deadline: '2024-05-30',
+            priority: 'Medium'
+          }
+        },
+        {
+          id: '3',
+          data: {
+            project: 'User Experience Optimization',
+            manager: 'Mike Chen',
+            progress: '92%',
+            deadline: '2024-03-25',
+            priority: 'High'
+          }
+        },
+        {
+          id: '4',
+          data: {
+            project: 'Backend Management System',
+            manager: 'Lisa Wang',
+            progress: '15%',
+            deadline: '2024-06-20',
+            priority: 'Low'
+          }
+        }
       ],
       searchable: true,
       pageSize: 8

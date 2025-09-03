@@ -283,9 +283,10 @@
               <div class="mb-8">
                 <div class="mb-6 flex items-center gap-2">
                   <span class="icon-[lucide--eye] text-success size-5"></span>
-                  <h3 class="text-base-content text-lg font-semibold">实时预览</h3>
+                  <h3 class="text-base-content text-lg font-semibold">{m.help_live_preview()}</h3>
                   <div class="badge badge-success badge-sm">
-                    {Math.min(3, section.examples.length)} 个预览
+                    {Math.min(3, section.examples.length)}
+                    {m.help_previews_count()}
                   </div>
                 </div>
 
@@ -342,7 +343,7 @@
         <span class="icon-[lucide--heart] size-4"></span>
         <p class="text-sm">NLUI MCP - Natural Language User Interface Framework</p>
       </div>
-      <p class="text-base-content/40 text-xs">为现代Web应用提供智能UI组件解决方案</p>
+      <p class="text-base-content/40 text-xs">{m.help_footer_tagline()}</p>
     </div>
   </div>
 </div>
