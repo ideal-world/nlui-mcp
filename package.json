@@ -31,7 +31,7 @@
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
     "test:unit": "vitest",
-    "test": "pnpm run test:unit -- --run",
+    "test": "vitest run --reporter=verbose",
     "machine-translate": "inlang machine translate --project project.inlang",
     "generate:schemas": "tsx scripts/generate-schemas.ts"
   },

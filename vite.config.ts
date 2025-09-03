@@ -17,31 +17,15 @@ export default defineConfig({
   },
   // @ts-ignore - This is for vitest configuration
   test: {
-    projects: [
-      {
-        extends: './vite.config.ts',
-        test: {
-          name: 'client',
-          environment: 'browser',
-          browser: {
-            enabled: true,
-            provider: 'playwright',
-            instances: [{ browser: 'chromium' }]
-          },
-          include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
-          exclude: ['src/lib/server/**'],
-          setupFiles: ['./vitest-setup-client.ts']
-        }
-      },
-      {
-        extends: './vite.config.ts',
-        test: {
-          name: 'server',
-          environment: 'node',
-          include: ['src/**/*.{test,spec}.{js,ts}'],
-          exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
-        }
+    globals: true,
+    environment: 'node',
+    include: ['src/**/*.{test,spec}.{js,ts}'],
+    exclude: ['src/**/*.svelte.{test,spec}.{js,ts}', 'src/lib/server/**'],
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true
       }
-    ]
+    }
   }
 });
