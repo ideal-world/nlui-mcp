@@ -43,6 +43,7 @@
     "@modelcontextprotocol/sdk": "^1.17.5",
     "apexcharts": "^5.3.4",
     "flyonui": "^2.4.0",
+    "jsonrepair": "^3.13.0",
     "lodash": "^4.17.21",
     "marked": "^16.2.1",
     "openai": "^5.18.1",

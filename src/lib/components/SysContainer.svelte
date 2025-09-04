@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
-  import UIContainer from './UIContainer.svelte';
-  import LanguageSwitcher from './LanguageSwitcher.svelte';
-  import ThemeSwitcher from './ThemeSwitcher.svelte';
+  import type { OpenAIMessage } from '$lib/utils/openAIClient';
+  import { jsonrepair } from 'jsonrepair';
   import * as m from '../../paraglide/messages';
   import { processConversationClient } from '../../routes/demo/clientConversationService';
+  import LanguageSwitcher from './LanguageSwitcher.svelte';
+  import ThemeSwitcher from './ThemeSwitcher.svelte';
+  import UIContainer from './UIContainer.svelte';
 
   // 对话数据接口
   interface ConversationData {
@@ -16,7 +16,6 @@
     lastActivity: number;
     userInput: string; // 保存用户输入内容
     response?: string; // AI 文字响应
-    uiUrl?: string; // UI 组件 URL
   }
 
   // 状态管理
@@ -90,7 +89,7 @@
       console.log('🚀 开始处理对话:', { sessionId: currentConversation!.sessionId, input });
 
       // 使用 demo 中验证过的对话处理方法
-      const result = await processConversationClient(currentConversation!.sessionId, input, 'zh');
+      const result = (await processConversationClient(currentConversation!.sessionId, input, 'zh', true)) as OpenAIMessage;
 
       console.log('✅ 对话处理完成:', result);
 
@@ -98,43 +97,25 @@
       const updatedConversations = [...conversations];
       const conversationIndex = conversations.findIndex((c) => c.id === currentConversation!.id);
 
-      if (conversationIndex !== -1) {
-        // 先更新文字响应
-        updatedConversations[conversationIndex] = {
-          ...currentConversation!,
-          response: result.response,
-          uiUrl: result.uiUrl,
-          lastActivity: Date.now()
-        };
-        conversations = updatedConversations;
-
-        console.log('📝 更新文字响应:', { response: result.response, uiUrl: result.uiUrl });
-
-        // 如果有 uiUrl，获取并设置 UI 配置
-        if (result.uiUrl) {
-          console.log('🎨 开始加载 UI 组件:', result.uiUrl);
-          try {
-            const response = await fetch(result.uiUrl);
-            if (response.ok) {
-              const nluiProp = await response.json();
-              console.log('✅ UI 组件加载成功:', nluiProp);
-
-              // 更新 UI 配置
-              updatedConversations[conversationIndex] = {
-                ...updatedConversations[conversationIndex],
-                nluiProp
-              };
-              conversations = [...updatedConversations];
-            } else {
-              console.warn(`❌ UI 组件加载失败: ${response.status}`);
-            }
-          } catch (uiError) {
-            console.warn('❌ UI 组件加载异常:', uiError);
-          }
-        } else {
-          console.log('⚠️ 没有生成 UI 组件');
+      let nluiPropStr = result.tool_calls?.[0]?.function?.arguments!;
+      let nluiProp;
+      try {
+        nluiProp = JSON.parse(nluiPropStr).nluiProps;
+      } catch (_e) {
+        try {
+          nluiProp = JSON.parse(jsonrepair(nluiPropStr)).nluiProps;
+        } catch (e) {
+          console.error('❌ JSON 解析失败，无法修复:', e);
+          throw e;
         }
       }
+      updatedConversations[conversationIndex] = {
+        ...currentConversation!,
+        response: result.content || '',
+        nluiProp: nluiProp,
+        lastActivity: Date.now()
+      };
+      conversations = updatedConversations;
     } catch (error) {
       console.error('❌ 对话处理失败:', error);
       currentError = error instanceof Error ? error.message : m.sys_container_processing_error();
@@ -154,7 +135,6 @@
           ...currentConversation,
           nluiProp: null,
           response: undefined,
-          uiUrl: undefined,
           lastActivity: Date.now()
         };
         conversations = updatedConversations;

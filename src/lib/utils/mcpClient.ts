@@ -1,6 +1,6 @@
 /**
- * 优化的MCP客户端工具
- * Optimized MCP Client Utilities
+ * MCP客户端工具
+ * MCP Client Utilities
  */
 
 import { apiClient } from '$lib/utils/apiClient';

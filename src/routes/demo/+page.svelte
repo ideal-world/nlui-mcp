@@ -131,7 +131,17 @@
       console.log('🆔 会话ID:', currentSessionId);
 
       // 使用客户端对话服务处理消息
-      const result = await processConversationClient(currentSessionId, query, 'zh');
+      const result = (await processConversationClient(currentSessionId, query, 'zh')) as {
+        response: string;
+        nluiConfig?: any;
+        uiUrl?: string;
+        meta: {
+          timestamp: string;
+          usedTools: boolean;
+          model: string;
+          finishReason: string;
+        };
+      };
 
       console.log('✅ 对话处理完成');
       console.log('📊 结果摘要:', {
