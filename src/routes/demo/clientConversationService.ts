@@ -105,12 +105,6 @@ function convertMCPToolToOpenAI(mcpTool: any): OpenAITool {
  * 初始化会话 - 加载系统提示词和工具
  */
 async function initializeSession(session: ConversationSession, language = 'zh'): Promise<void> {
-  logger.info('Session initialized', {
-    component: 'ConversationService',
-    action: 'initializeSession',
-    metadata: { sessionId: session.id }
-  });
-
   // 1. 获取init-session系统提示词
   if (!session.systemPromptLoaded) {
     try {
@@ -234,7 +228,7 @@ async function handleToolCalls(session: ConversationSession, assistantMessage: O
         metadata: { toolName: toolCall.function.name, success: true }
       });
 
-      // 添加工具响应消息（简化内容，只保留必要信息）
+      // 添加工具响应消息
       const toolMessage: OpenAIMessage = {
         role: 'tool',
         tool_call_id: toolCall.id,

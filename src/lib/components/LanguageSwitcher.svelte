@@ -55,10 +55,17 @@
     if (browser && newLocale !== currentLocale && (newLocale === 'en' || newLocale === 'zh')) {
       try {
         isDropdownOpen = false;
+
+        // 设置cookie
+        document.cookie = `PARAGLIDE_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
+
+        // 更新paraglide设置
         setLocale(newLocale);
+
+        // 重新加载页面以应用新语言
         setTimeout(() => {
           window.location.reload();
-        }, 100);
+        }, 50);
       } catch (error) {
         console.error('Language switch failed:', error);
       }
@@ -127,8 +134,7 @@
       {#each locales as locale}
         <button
           class="text-base-content hover:bg-base-200 flex w-full items-center gap-2 px-3 py-1.5 text-xs {getCurrentLocale() === locale ? 'bg-primary/10 text-primary' : ''}"
-          onclick={() => handleLanguageChange(locale)}
-        >
+          onclick={() => handleLanguageChange(locale)}>
           <span class="text-sm">{languageFlags[locale]}</span>
           <span>{languageNames[locale]}</span>
           {#if getCurrentLocale() === locale}

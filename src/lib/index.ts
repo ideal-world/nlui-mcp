@@ -9,6 +9,7 @@ export * from './ui/nluiProps.types';
 
 // 导出组件
 export { default as UIContainer } from './components/UIContainer.svelte';
+export { default as SysContainer } from './components/SysContainer.svelte';
 export { default as ComponentRenderer } from './components/ComponentRenderer.svelte';
 export { default as RenderError } from './components/RenderError.svelte';
 export { default as LanguageSwitcher } from './components/LanguageSwitcher.svelte';
